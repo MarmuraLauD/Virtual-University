@@ -9,9 +9,9 @@ import java.sql.SQLException;
 public class StudentMapper implements RowMapper<Student> {
     @Override
     public Student mapRow(ResultSet resultSet, int i) throws SQLException {
-        return new Student(resultSet.getInt("id"), resultSet.getString("student_name"),
-                resultSet.getString("surname"), resultSet.getString("father_name"),
-                resultSet.getDate("admission_date"), resultSet.getString("email"),
+        return new Student(resultSet.getInt("id"), resultSet.getString("name"),
+                resultSet.getString("surname"), resultSet.getString("father"),
+                resultSet.getDate("date"), resultSet.getString("email"),
                 resultSet.getInt("group_id"));
     }
 }

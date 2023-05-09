@@ -1,11 +1,11 @@
 package com.bettervns.adminservice.requests;
 
-public record NewUserRequest(
-        String id,
+public record NewStudentRequest(
         String name,
         String surname,
         String father,
         String date,
-        String email
+        String email,
+        String groupId
 ) {
 }

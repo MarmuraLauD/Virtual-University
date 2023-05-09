@@ -17,22 +17,27 @@ public class StudentDAO {
     }
 
     public List<Student> index() {
-      return studentsJdbcTemplate.query("SELECT * FROM Student", new StudentMapper());
+        return studentsJdbcTemplate.query("SELECT * FROM Student", new StudentMapper());
+    }
+
+    public List<Student> showOfGroup(int groupId) {
+        return studentsJdbcTemplate.query("SELECT * FROM Student WHERE group_id = ?", new Object[]{groupId}, new StudentMapper());
     }
 
     public Student show(int id) {
-        return studentsJdbcTemplate.query("SELECT * FROM student WHERE id=?", new Object[]{id},
+        return studentsJdbcTemplate.query("SELECT * FROM student WHERE id = ?", new Object[]{id},
                 new StudentMapper()).stream().findAny().orElse(null);
     }
 
     public void addStudent(Student student) {
-        studentsJdbcTemplate.update("INSERT INTO student VALUES(?, ?, ?, ?, ?, ?, ?)",
-                student.getId(), student.getName(), student.getSurname(), student.getFather(), student.getDate(), student.getEmail(), 3);
+        studentsJdbcTemplate.update("INSERT INTO student(name, surname, father, date, email, group_id) " +
+                        "VALUES(?, ?, ?, ?, ?, ?)",
+                student.getName(), student.getSurname(), student.getFather(), student.getDate(), student.getEmail(), student.getGroupId());
     }
 
     public void update(int id, Student student) {
-        studentsJdbcTemplate.update("UPDATE student SET student_name=?, admission_date=?, email=? WHERE id=?",
-                student.getName(), student.getName(), student.getEmail(), id);
+        studentsJdbcTemplate.update("UPDATE student SET name = ?, surname = ?, father = ?, date = ?, email = ?, group_id = ? WHERE id=?",
+                student.getName(), student.getSurname(), student.getFather(), student.getDate(), student.getEmail(), student.getGroupId(), id);
     }
 
     public void delete(int id) {
