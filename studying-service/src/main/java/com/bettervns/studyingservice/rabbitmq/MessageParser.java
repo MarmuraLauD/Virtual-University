@@ -39,7 +39,7 @@ public class MessageParser {
 
     public String getMessageBody(String message) {
         StringBuilder messageBody = new StringBuilder();
-        for (int i = getSpaceIndexByNumber(message, 2 + Boolean.compare(getOperationType(message).equals("create"), true)) + 1;
+        for (int i = getSpaceIndexByNumber(message, 2 - Boolean.compare(getOperationType(message).equals("create"), true)) + 1;
              i < message.length(); i++) {
             messageBody.append(message.charAt(i));
         }

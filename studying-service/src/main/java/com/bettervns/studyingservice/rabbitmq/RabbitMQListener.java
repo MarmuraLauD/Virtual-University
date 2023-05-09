@@ -31,7 +31,6 @@ public class RabbitMQListener {
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames(STUDYING_QUEUE_NAME);
         container.setMessageListener(message -> {
-            System.out.println("Received from Queue: " + message.getBody());
             processor.processMessage(new String(message.getBody()));
         });
         return container;

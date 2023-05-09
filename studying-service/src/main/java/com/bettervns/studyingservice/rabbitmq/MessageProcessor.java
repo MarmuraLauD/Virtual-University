@@ -20,10 +20,6 @@ public class MessageProcessor {
 
     public void processMessage(String message) {
         System.out.println("Processor got: " + message);
-        System.out.println(messageParser.getOperationType(message));
-        System.out.println(messageParser.getModelType(message));
-        //System.out.println(messageParser.getId(message));
-        System.out.println(messageParser.getMessageBody(message));
         switch (messageParser.getModelType(message)) {
             case "department" -> performDepartmentAction(message);
             case "course" -> performCourseAction(message);
