@@ -14,7 +14,6 @@
         <module name="bettervns-security" />
         <module name="eureka-server" />
         <module name="admin-service" />
-        <module name="students-service" />
       </profile>
     </annotationProcessing>
   </component>

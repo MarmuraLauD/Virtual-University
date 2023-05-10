@@ -1,7 +1,6 @@
 package com.bettervns.adminservice.controllers;
 
 import com.bettervns.adminservice.requests.NewGroupRequest;
-import com.bettervns.adminservice.requests.NewStudentRequest;
 import com.google.gson.GsonBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
