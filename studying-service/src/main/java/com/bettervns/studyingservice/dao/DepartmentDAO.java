@@ -17,7 +17,12 @@ public class DepartmentDAO {
     }
 
     public List<Department> index() {
-        return coreJdbcTemplate.query("SELECT * FROM Student", new DepartmentMapper());
+        return coreJdbcTemplate.query("SELECT * FROM department", new DepartmentMapper());
+    }
+
+    public Department show(int id) {
+        return coreJdbcTemplate.query("SELECT * FROM department WHERE id = ?", new Object[]{id},
+                new DepartmentMapper()).stream().findAny().orElse(null);
     }
 
     public void addDepartment(Department department) {

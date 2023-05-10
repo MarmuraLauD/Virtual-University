@@ -9,7 +9,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
-import java.time.Year;
 
 @SpringBootApplication
 public class StudyingServiceApplication {
@@ -17,7 +16,7 @@ public class StudyingServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(StudyingServiceApplication.class, args);
         Department dept = new Department(1, "name", "phone", "email");
-        Group group = new Group(1, "KI-44", Year.of(4), 1);
+        Group group = new Group(1, "KI-44", 4, 1);
         System.out.println(dept.toString() + "\n" + group.toString());
     }
 

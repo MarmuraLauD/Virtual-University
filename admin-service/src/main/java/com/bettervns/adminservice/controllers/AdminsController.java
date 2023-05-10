@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping()
 public class AdminsController {
 
     private final AdminDAO adminDao;
@@ -17,7 +17,7 @@ public class AdminsController {
         this.adminDao = adminDao;
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/admin/{id}")
     public String homePage(@PathVariable("id") int id, Model model) {
         model.addAttribute("admin", adminDao.show(id));
         return adminDao.show(id).toString();

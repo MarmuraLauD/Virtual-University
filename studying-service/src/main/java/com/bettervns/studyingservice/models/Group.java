@@ -12,7 +12,7 @@ import java.time.Year;
 public class Group {
     private int id;
     private String name;
-    private Year studyingYear;
+    private int studyingYear;
     private int departmentId;
 
     @Override

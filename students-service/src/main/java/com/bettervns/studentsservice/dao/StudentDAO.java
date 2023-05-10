@@ -20,9 +20,9 @@ public class StudentDAO {
         return studentsJdbcTemplate.query("SELECT * FROM Student", new StudentMapper());
     }
 
-    public List<Student> showOfGroup(int groupId) {
+    /*public List<Student> showOfGroup(int groupId) {
         return studentsJdbcTemplate.query("SELECT * FROM Student WHERE group_id = ?", new Object[]{groupId}, new StudentMapper());
-    }
+    }*/
 
     public Student show(int id) {
         return studentsJdbcTemplate.query("SELECT * FROM student WHERE id = ?", new Object[]{id},

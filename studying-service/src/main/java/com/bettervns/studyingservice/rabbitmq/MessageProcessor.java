@@ -1,7 +1,9 @@
 package com.bettervns.studyingservice.rabbitmq;
 
 import com.bettervns.studyingservice.dao.DepartmentDAO;
+import com.bettervns.studyingservice.dao.GroupDAO;
 import com.bettervns.studyingservice.models.Department;
+import com.bettervns.studyingservice.models.Group;
 import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,11 +12,13 @@ import org.springframework.stereotype.Component;
 public class MessageProcessor {
     // TODO : implement all models DAOs and inject here.
     private final DepartmentDAO departmentDAO;
+    private final GroupDAO groupDAO;
     private final MessageParser messageParser;
 
     @Autowired
-    public MessageProcessor(DepartmentDAO departmentDAO, MessageParser messageParser) {
+    public MessageProcessor(GroupDAO groupDAO, DepartmentDAO departmentDAO, MessageParser messageParser) {
         this.departmentDAO = departmentDAO;
+        this.groupDAO = groupDAO;
         this.messageParser = messageParser;
     }
 
@@ -42,11 +46,21 @@ public class MessageProcessor {
         }
     }
 
-    // TODO : Implement DAOs and implement that methods.
     public void performGroupAction(String message) {
-
+        switch (messageParser.getOperationType(message)) {
+            case "create" -> {
+                groupDAO.addGroup(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
+                        fromJson(messageParser.getMessageBody(message), Group.class));
+            }
+            case "update" -> {
+                groupDAO.update(messageParser.getId(message), new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
+                        fromJson(messageParser.getMessageBody(message), Group.class));
+            }
+            case "delete" -> groupDAO.delete(messageParser.getId(message));
+        }
     }
 
+    // TODO : Implement DAOs and implement that methods.
     public void performCourseAction(String message) {
 
     }

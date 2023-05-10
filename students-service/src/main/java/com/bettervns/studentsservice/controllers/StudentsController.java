@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/students")
+@RequestMapping()
 public class StudentsController {
 
     private final StudentDAO studentDAO;
@@ -17,7 +17,7 @@ public class StudentsController {
         this.studentDAO = studentDAO;
     }
 
-    @GetMapping()
+    @GetMapping("/students")
     public ResponseEntity<?> index(){
         return ResponseEntity.ok(new Gson().toJson(studentDAO.index()));
     }
@@ -27,8 +27,8 @@ public class StudentsController {
         return ResponseEntity.ok(new Gson().toJson(studentDAO.show(id)));
     }
 
-    @GetMapping("/group/{id}")
+    /*@GetMapping("/students/group/{id}")
     public ResponseEntity<?> showStudentsOfGroup(@PathVariable("id") int id) {
         return ResponseEntity.ok(new Gson().toJson(studentDAO.showOfGroup(id)));
-    }
+    }*/
 }
