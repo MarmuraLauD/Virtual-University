@@ -15,7 +15,14 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
-import java.security.Key;
+import javax.crypto.EncryptedPrivateKeyInfo;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.*;
+import java.util.Base64;
 import java.util.Date;
 
 @Component
@@ -24,6 +31,12 @@ public class JwtUtils {
 
     @Value("${vns.app.jwtSecret}")
     private String jwtSecret;
+
+    @Value("${vns.app.privateKeyFileName}")
+    private String privateKeyFileName;
+
+    @Value("${vns.app.publicKeyFileName}")
+    private String publicKeyFileName;
 
     @Value("${vns.app.jwtExpirationMs}")
     private int jwtExpirationMs;
@@ -48,9 +61,9 @@ public class JwtUtils {
         return generateCookie(jwtRefreshCookie, refreshToken, maxAge);
     }
 
-    public String getJwtFromCookies(HttpServletRequest request) {
-        return getCookieValueByName(request, jwtCookie);
-    }
+//    public String getJwtFromCookies(HttpServletRequest request) {
+//        return getCookieValueByName(request, jwtCookie);
+//    }
 
     public String getJwtRefreshFromCookies(HttpServletRequest request) {
         return getCookieValueByName(request, jwtRefreshCookie);
@@ -71,6 +84,42 @@ public class JwtUtils {
                 .claim("roles", userPrincipal.getAuthorities().toString())
                 .signWith(getSignInKey())
                 .compact();
+    }
+
+    public void generateSecretKeyPair() throws NoSuchAlgorithmException, IOException {
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        keyPairGenerator.initialize(2048);
+        KeyPair keyPair = keyPairGenerator.genKeyPair();
+
+        PrivateKey privateKey = keyPair.getPrivate();
+        PublicKey publicKey = keyPair.getPublic();
+
+        savePrivateKey(privateKey, privateKeyFileName);
+        savePublicKey(publicKey, publicKeyFileName);
+    }
+
+    public void savePrivateKey(PrivateKey privateKey, String fileName) {
+        String homeDir = System.getProperty("user.home");
+        String filePath = homeDir + "/" + fileName;
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            EncryptedPrivateKeyInfo encryptedPrivateKeyInfo = new EncryptedPrivateKeyInfo(privateKey.getEncoded());
+            fos.write(encryptedPrivateKeyInfo.getEncoded());
+        } catch (IOException e) {
+            // Обработка ошибки сохранения файла
+        }
+    }
+
+    //метод получения закрытого ключа
+    //метод получения открытого ключа
+
+    public void savePublicKey(PublicKey publicKey, String fileName) throws IOException {
+        String filePath = "./bettervns-backend/" + fileName;
+        byte[] publicKeyBytes = publicKey.getEncoded();
+        String publicKeyBase64 = Base64.getEncoder().encodeToString(publicKeyBytes);
+        String publicKeyPEM = "-----BEGIN PUBLIC KEY-----\n" + publicKeyBase64 + "\n-----END PUBLIC KEY-----\n";
+
+        Path path = Paths.get(filePath);
+        Files.write(path, publicKeyPEM.getBytes());
     }
 
     public String generateJwtToken(User user) {
@@ -144,4 +193,6 @@ public class JwtUtils {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+
 }
