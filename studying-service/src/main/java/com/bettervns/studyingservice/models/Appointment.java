@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -13,8 +14,8 @@ import java.util.Date;
 public class Appointment {
     private int id;
     private int teacherId;
-    private LocalDateTime begin_time;
-    private LocalDateTime end_time;
+    private Time begin_time;
+    private Time end_time;
     private Date date;
     private String meetingLink;
     private int recordingId;
