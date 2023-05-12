@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -71,6 +70,9 @@ public class AuthRestController {
     @Value("${vns.app.privateKeyFileName}")
     private String privateKeyFileName;
 
+    @Value("${vns.app.publicKeyFileName}")
+    private String publicKeyFileName;
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         try {
@@ -80,10 +82,12 @@ public class AuthRestController {
             UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
             String homeDir = System.getProperty("user.home");
-            String filePath = homeDir + "/" + privateKeyFileName;
-            File privateFile = new File(filePath);
+            String filePathForPrivateKey = homeDir + "/" + privateKeyFileName;
+            String filePathForPublicKey = "../bettervns-backend/" + publicKeyFileName;
+
+            File privateFile = new File(filePathForPrivateKey);
             boolean created = privateFile.createNewFile();
-            File publicFile = new File(filePath);
+            File publicFile = new File(filePathForPublicKey);
             boolean createdSecond = publicFile.createNewFile();
             if (created || createdSecond || privateFile.length() == 0 || publicFile.length() == 0) {
                 jwtUtils.generateSecretKeyPair();
@@ -105,7 +109,7 @@ public class AuthRestController {
         } catch (AuthenticationException e) {
             HttpHeaders headers = new HttpHeaders();
             return new ResponseEntity<>(headers, HttpStatus.UNAUTHORIZED);
-        } catch (IOException | NoSuchAlgorithmException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
