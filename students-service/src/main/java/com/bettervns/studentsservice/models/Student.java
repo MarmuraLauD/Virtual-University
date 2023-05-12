@@ -1,8 +1,5 @@
 package com.bettervns.studentsservice.models;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +16,16 @@ public class Student {
     private String father;
     private Date date;
     private String email;
-    private int group_id;
+    private int groupId;
+
+    public Student(String name, String surname, String father, Date date, String email, int group_id) {
+        this.name = name;
+        this.surname = surname;
+        this.father = father;
+        this.date = date;
+        this.email = email;
+        this.groupId = group_id;
+    }
 
     @Override
     public String toString() {
@@ -30,7 +36,7 @@ public class Student {
                 ", father_name='" + father + '\'' +
                 ", admissionDate=" + date +
                 ", email='" + email + '\'' +
-                ", group_id=" + group_id +
+                ", group_id=" + groupId +
                 '}';
     }
 }

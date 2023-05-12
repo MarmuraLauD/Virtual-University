@@ -11,6 +11,7 @@ public class RabbitMQCreationConfig {
 
     private static final String STUDENTS_QUEUE_NAME = "studentsQueue";
     private static final String TEACHERS_QUEUE_NAME = "teachersQueue";
+    private static final String STUDYING_QUEUE_NAME = "studyingQueue";
     private static final String DIRECT_EXCHANGE_NAME = "betterVNS-direct-exchange";
     private static final String RABBIT_HOST_NAME = "localhost";
 
@@ -38,6 +39,11 @@ public class RabbitMQCreationConfig {
     }
 
     @Bean
+    Queue studyingQueue() {
+        return new Queue(STUDYING_QUEUE_NAME, false);
+    }
+
+    @Bean
     Binding studentsQueueBinding(Queue studentsQueue, DirectExchange directExchange) {
         return BindingBuilder.bind(studentsQueue).to(directExchange).with(STUDENTS_QUEUE_NAME);
     }
@@ -45,5 +51,10 @@ public class RabbitMQCreationConfig {
     @Bean
     Binding teachersQueueBinding(Queue teachersQueue, DirectExchange directExchange) {
         return BindingBuilder.bind(teachersQueue).to(directExchange).with(TEACHERS_QUEUE_NAME);
+    }
+
+    @Bean
+    Binding studyingQueueBinding(Queue studyingQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(studyingQueue).to(directExchange).with(STUDYING_QUEUE_NAME);
     }
 }

@@ -2,18 +2,16 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
-      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="bettervns-backend" />
-        <module name="students-service" />
-        <module name="bettervns" />
-        <module name="api-gateway" />
         <module name="bettervns-security" />
+        <module name="api-gateway" />
+        <module name="bettervns-backend" />
         <module name="eureka-server" />
         <module name="admin-service" />
+        <module name="students-service" />
       </profile>
     </annotationProcessing>
   </component>
