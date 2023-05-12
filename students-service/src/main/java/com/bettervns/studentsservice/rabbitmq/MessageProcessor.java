@@ -19,7 +19,7 @@ public class MessageProcessor {
     }
 
     public void processMessage(String message){
-        System.out.println("Received from Queue: " + message);
+        System.out.println("Processor got: " + message);
         String operationType = messageParser.getOperationType(message);
         switch (operationType) {
             case "create" -> createStudent(messageParser.getMessageBody(message));
