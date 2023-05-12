@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -24,6 +25,12 @@ public class AppointmentDAO {
     public Appointment show(int id) {
         return coreJdbcTemplate.query("SELECT * FROM appointment WHERE id = ?", new Object[]{id},
                 new AppointmentMapper()).stream().findAny().orElse(null);
+    }
+
+    // TODO : implement this using JOIN in SQL querry, try java.util.Date and java.sql.Date
+    public List<Appointment> showForGroupByDate(int group_id, Date date){
+        //Not yet implemented
+        return null;
     }
 
     public void addAppointment(Appointment appointment) {
