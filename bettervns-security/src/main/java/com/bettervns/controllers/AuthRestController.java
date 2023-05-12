@@ -1,14 +1,10 @@
 package com.bettervns.controllers;
 
-import com.bettervns.models.ERole;
-import com.bettervns.models.Role;
-import com.bettervns.models.User;
 import com.bettervns.exception.TokenRefreshException;
 import com.bettervns.models.RefreshToken;
 import com.bettervns.repository.RoleRepository;
 import com.bettervns.repository.UserRepository;
 import com.bettervns.payloads.request.LoginRequest;
-import com.bettervns.payloads.request.SignupRequest;
 import com.bettervns.payloads.response.MessageResponse;
 import com.bettervns.security.jwt.JwtUtils;
 import com.bettervns.security.services.RefreshTokenService;
@@ -30,10 +26,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.util.HashSet;
+import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
-import java.util.Set;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -72,13 +67,32 @@ public class AuthRestController {
     @Value("${vns.app.jwtRefreshExpirationMs}")
     private Long refreshTokenDurationMs;
 
+    @Value("${vns.app.privateKeyFileName}")
+    private String privateKeyFileName;
+
+    @Value("${vns.app.publicKeyFileName}")
+    private String publicKeyFileName;
+
     @PostMapping("/signin")
-    public ResponseEntity<Void> authenticateUser(@Valid LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
+
+            String homeDir = System.getProperty("user.home");
+            String filePathForPrivateKey = homeDir + "/" + privateKeyFileName;
+            String filePathForPublicKey = "../bettervns-backend/" + publicKeyFileName;
+
+            File privateFile = new File(filePathForPrivateKey);
+            boolean created = privateFile.createNewFile();
+            File publicFile = new File(filePathForPublicKey);
+            boolean createdSecond = publicFile.createNewFile();
+            if (created || createdSecond || privateFile.length() == 0 || publicFile.length() == 0) {
+                jwtUtils.generateSecretKeyPair();
+            }
+
             ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userPrincipal);
 
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(userPrincipal.getId(), loginRequest.isRememberMe());
@@ -91,64 +105,13 @@ public class AuthRestController {
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.SET_COOKIE, jwtCookie.toString());
             headers.add(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString());
-            headers.setLocation(URI.create("/home"));
-            headers.setBearerAuth(jwtUtils.generateJwtToken(userPrincipal));
-            return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+            return new ResponseEntity<>(headers, HttpStatus.OK);
         } catch (AuthenticationException e) {
             HttpHeaders headers = new HttpHeaders();
-            headers.setLocation(URI.create("/signin?error"));
-            return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+            return new ResponseEntity<>(headers, HttpStatus.UNAUTHORIZED);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-    }
-
-
-    @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository != null) {
-            if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-                return ResponseEntity
-                        .badRequest()
-                        .body(new MessageResponse("Error: Email is already in use!"));
-            }
-        }
-
-        // Create new user's account
-        User user = new User(signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        Set<String> strRoles = signUpRequest.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_STUDENT)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin" -> {
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-                    }
-                    case "teacher" -> {
-                        Role modRole = roleRepository.findByName(ERole.ROLE_TEACHER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-                    }
-                    default -> {
-                        Role userRole = roleRepository.findByName(ERole.ROLE_STUDENT)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                    }
-                }
-            });
-        }
-
-        user.setRoles(roles);
-        userRepository.save(user);
-
-        return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }
 
     @PostMapping("/signout")
@@ -164,12 +127,11 @@ public class AuthRestController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE, jwtCookie.toString());
         headers.add(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString());
-        headers.setLocation(URI.create("/signin"));
-        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+        return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 
     @PostMapping("/refreshtoken")
-    public ResponseEntity<?> refreshtoken(HttpServletRequest request, @RequestHeader("Referer") String referer) {
+    public ResponseEntity<?> refreshtoken(HttpServletRequest request) {
         String refreshToken = jwtUtils.getJwtRefreshFromCookies(request);
 
         if ((refreshToken != null) && (refreshToken.length() > 0)) {
@@ -180,9 +142,7 @@ public class AuthRestController {
                         ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(user);
                         HttpHeaders headers = new HttpHeaders();
                         headers.add(HttpHeaders.SET_COOKIE, jwtCookie.toString());
-                        headers.setLocation(URI.create(referer));
-
-                        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
+                        return new ResponseEntity<>(headers, HttpStatus.OK);
                     })
                     .orElseThrow(() -> new TokenRefreshException(refreshToken,
                             "Refresh token is not in database!"));
