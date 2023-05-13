@@ -81,9 +81,9 @@ public class AuthRestController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
-            String homeDir = System.getProperty("user.home");
-            String filePathForPrivateKey = homeDir + "/" + privateKeyFileName;
-            String filePathForPublicKey = "../bettervns-backend/" + publicKeyFileName;
+            //KMS in future
+            String filePathForPrivateKey = System.getProperty("user.home") + "/" + privateKeyFileName;
+            String filePathForPublicKey = System.getProperty("user.dir") + "/" + publicKeyFileName;
 
             File privateFile = new File(filePathForPrivateKey);
             boolean created = privateFile.createNewFile();
@@ -147,7 +147,6 @@ public class AuthRestController {
                     .orElseThrow(() -> new TokenRefreshException(refreshToken,
                             "Refresh token is not in database!"));
         }
-
         return ResponseEntity.badRequest().body(new MessageResponse("Refresh Token is empty!"));
     }
 }

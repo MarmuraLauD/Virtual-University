@@ -98,8 +98,7 @@ public class JwtUtils {
     }
 
     public void savePrivateKey(PrivateKey privateKey, String fileName) {
-        String homeDir = System.getProperty("user.home");
-        String filePath = homeDir + "/" + fileName;
+        String filePath = System.getProperty("user.home") + "/" + fileName;
         try (FileOutputStream fos = new FileOutputStream(filePath)) {
             PKCS8EncodedKeySpec encryptedPrivateKeyInfo = new PKCS8EncodedKeySpec(privateKey.getEncoded());
             fos.write(encryptedPrivateKeyInfo.getEncoded());
@@ -109,8 +108,7 @@ public class JwtUtils {
     }
 
     public PrivateKey getPrivateKey(String fileName) {
-        String homeDir = System.getProperty("user.home");
-        String filePath = homeDir + "/" + fileName;
+        String filePath = System.getProperty("user.home") + "/" + fileName;
         Path path = Paths.get(filePath);
         byte[] bytes = new byte[0];
         try {
@@ -134,8 +132,9 @@ public class JwtUtils {
         return null;
     }
 
-    public PublicKey getPublicKey(String filePath) {
+    public PublicKey getPublicKey(String fileName) {
         try {
+            String filePath = System.getProperty("user.dir") + "/" + fileName;
             File file = new File(filePath);
             FileInputStream fis = new FileInputStream(file);
             byte[] content = new byte[(int) file.length()];
@@ -161,7 +160,7 @@ public class JwtUtils {
     }
 
     public void savePublicKey(PublicKey publicKey, String fileName) {
-        String filePath = "../bettervns-backend/" + fileName;
+        String filePath = System.getProperty("user.dir") + "/" + fileName;
         try (PemWriter pemWriter = new PemWriter(new FileWriter(filePath))) {
             pemWriter.writeObject(new PemObject("PUBLIC KEY", publicKey.getEncoded()));
         } catch (IOException e) {
