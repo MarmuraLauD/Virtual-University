@@ -97,7 +97,7 @@ public class JwtUtils {
         }
     }
 
-    public void savePrivateKey(PrivateKey privateKey, String fileName) {
+    private void savePrivateKey(PrivateKey privateKey, String fileName) {
         String filePath = System.getProperty("user.home") + "/" + fileName;
         try (FileOutputStream fos = new FileOutputStream(filePath)) {
             PKCS8EncodedKeySpec encryptedPrivateKeyInfo = new PKCS8EncodedKeySpec(privateKey.getEncoded());
@@ -107,7 +107,7 @@ public class JwtUtils {
         }
     }
 
-    public PrivateKey getPrivateKey(String fileName) {
+    private PrivateKey getPrivateKey(String fileName) {
         String filePath = System.getProperty("user.home") + "/" + fileName;
         Path path = Paths.get(filePath);
         byte[] bytes = new byte[0];
@@ -132,7 +132,7 @@ public class JwtUtils {
         return null;
     }
 
-    public PublicKey getPublicKey(String fileName) {
+    private PublicKey getPublicKey(String fileName) {
         try {
             String filePath = System.getProperty("user.dir") + "/" + fileName;
             File file = new File(filePath);
@@ -159,7 +159,7 @@ public class JwtUtils {
         return null;
     }
 
-    public void savePublicKey(PublicKey publicKey, String fileName) {
+    private void savePublicKey(PublicKey publicKey, String fileName) {
         String filePath = System.getProperty("user.dir") + "/" + fileName;
         try (PemWriter pemWriter = new PemWriter(new FileWriter(filePath))) {
             pemWriter.writeObject(new PemObject("PUBLIC KEY", publicKey.getEncoded()));
@@ -203,14 +203,6 @@ public class JwtUtils {
             return null;
         }
     }
-
-//    public List<String> getRoleFromJwtToken(String token) {
-//        Claims claims = Jwts.parserBuilder().setSigningKey(getSignInKey()).build().parseClaimsJws(token).getBody();
-//        String roles = (String) claims.get("roles");
-//        roles = roles.replace("[", "").replace("]", "");
-//        String[] roleNames = roles.split(",");
-//        return new ArrayList<>(Arrays.asList(roleNames));
-//    }
 
     public boolean validateJwtToken(String authToken) {
         try {
