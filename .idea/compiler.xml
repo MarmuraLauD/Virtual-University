@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="studying-service" />
         <module name="bettervns-backend" />
         <module name="students-service" />
         <module name="teachers-service" />
@@ -25,6 +26,7 @@
       <module name="bettervns-security" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
       <module name="students-service" options="-parameters" />
+      <module name="studying-service" options="-parameters" />
       <module name="teachers-service" options="-parameters" />
     </option>
   </component>

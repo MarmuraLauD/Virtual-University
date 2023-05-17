@@ -3,6 +3,7 @@ package com.bettervns.teachersservice.controllers;
 
 import com.bettervns.teachersservice.dao.TeacherDAO;
 import com.bettervns.teachersservice.models.Teacher;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,33 +25,31 @@ public class TeachersController {
         this.teacherDAO = teacherDAO;
     }
 
-    @GetMapping
-    public List<Teacher> getAllTeachers() {
-        return teacherDAO.getAllTeachers();
+
+
+    @GetMapping("/teachers")
+    public ResponseEntity<?> getAllTeachers() {
+        return ResponseEntity.ok(new Gson().toJson(teacherDAO.getAllTeachers()));
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Teacher> getEmployeeById(@PathVariable("id") int employeeId){
-        return new ResponseEntity<Teacher>(teacherDAO.getTeacherById(employeeId), HttpStatus.OK);
+//    @GetMapping("/teacher/{id}")
+//    public ResponseEntity<Teacher> getTeacherById(@PathVariable("id") int employeeId){
+//        return new ResponseEntity<Teacher>(teacherDAO.getTeacherById(employeeId), HttpStatus.OK);
+//    }
+
+    @GetMapping("/teacher/{id}")
+    public ResponseEntity<?> getTeacherById(@PathVariable("id") int id) {
+        System.out.println(teacherDAO.getTeacherById(id));
+        return ResponseEntity.ok(new Gson().toJson(teacherDAO.getTeacherById(id)));
     }
 
-    @GetMapping("/new")
-    public String newTeacher(Model model) {
-        model.addAttribute("teacher", new Teacher());
-        return "new";
-    }
 
     @PostMapping()
     public Teacher createTeacher(@RequestBody Teacher teacher) {
         return teacherDAO.addTeacher(teacher);
     }
 
-    @GetMapping("/{id}/edit")
-    public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("teacher", teacherDAO.getTeacherById(id));
-        return "edit";
-    }
-//
+
 //    @PostMapping()
 //    public String newTeacher(@ModelAttribute("teacher") Teacher teacher, BindingResult bindingResult){
 //        if (bindingResult.hasErrors()) return "teachers/new";
@@ -64,10 +63,10 @@ public class TeachersController {
     public String update(@ModelAttribute("teacher") Teacher teacher, BindingResult bindingResult, @PathVariable("id") int id) {
         System.out.println(teacher.toString());
         if (bindingResult.hasErrors()) return "edit";
-
         teacherDAO.update(id, teacher);
         return "redirect:/teachers";
     }
+
 
 
     @DeleteMapping("/{id}")

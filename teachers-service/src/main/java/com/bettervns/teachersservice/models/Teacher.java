@@ -4,6 +4,8 @@ package com.bettervns.teachersservice.models;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "teacher")
 public class Teacher {
@@ -75,5 +77,6 @@ public class Teacher {
                 ", chair_id=" + chair_id +
                 '}';
     }
+
 }
 
