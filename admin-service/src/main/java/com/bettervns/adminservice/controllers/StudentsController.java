@@ -22,9 +22,7 @@ public class StudentsController {
 
     @PostMapping()
     public String createStudent(@RequestBody NewStudentRequest requestObject){
-        System.out.println(requestObject);
         String message = "create " + 0 + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
-        System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(STUDENTS_QUEUE_KEY, message);
         return "redirect:/admin/1";
