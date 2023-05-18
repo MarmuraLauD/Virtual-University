@@ -114,6 +114,22 @@ public class AuthRestController {
         }
     }
 
+    @GetMapping("/signin")
+    public ResponseEntity<?> sendLoginUserResponse(@CurrentSecurityContext SecurityContext context) {
+        Object principal = context.getAuthentication().getPrincipal();
+        if (Objects.equals(principal.toString(), "anonymousUser")) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping("/signout")
+    public ResponseEntity<?> sendLogoutUserResponse(@CurrentSecurityContext SecurityContext context) {
+        Object principal = context.getAuthentication().getPrincipal();
+        if (!Objects.equals(principal.toString(), "anonymousUser")) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
     @PostMapping("/signout")
     public ResponseEntity<?> logoutUser(@CurrentSecurityContext SecurityContext context) {
         Object principal = context.getAuthentication().getPrincipal();
@@ -121,7 +137,6 @@ public class AuthRestController {
             Long userId = ((UserDetailsImpl) principal).getId();
             refreshTokenService.deleteByUserId(userId);
         }
-
         ResponseCookie jwtCookie = jwtUtils.getCleanJwtCookie();
         ResponseCookie jwtRefreshCookie = jwtUtils.getCleanJwtRefreshCookie();
         HttpHeaders headers = new HttpHeaders();

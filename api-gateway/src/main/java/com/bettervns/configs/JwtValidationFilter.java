@@ -73,7 +73,7 @@ public class JwtValidationFilter implements GatewayFilter, Ordered {
         Set<String> roles = getRoleFromJwtToken(authToken);
         boolean isValid = false;
         for (String role : roles) {
-            if(role.equals("ROLE_ADMIN")) isValid = true;
+            if (roleAttribute.equals("ROLE_ANYONE") || role.equals("ROLE_ADMIN")) isValid = true;
             else isValid = role.equals(roleAttribute);
         }
         return isValid;
@@ -109,7 +109,7 @@ public class JwtValidationFilter implements GatewayFilter, Ordered {
     public Set<String> getRoleFromJwtToken(String token) {
         Claims claims = Jwts.parserBuilder().setSigningKey(getPublicKey()).build().parseClaimsJws(token).getBody();
         String roles = (String) claims.get("roles");
-        roles = roles.replace("[", "").replace("]", "");
+        roles = roles.replace("[", "").replace("]", "").replace(" ", "");
         String[] roleNames = roles.split(",");
         return new HashSet<>(Arrays.asList(roleNames));
     }
