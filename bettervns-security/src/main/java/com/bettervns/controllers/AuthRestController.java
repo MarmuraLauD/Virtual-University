@@ -81,6 +81,10 @@ public class AuthRestController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
+            //KMS in future
+            String filePathForPrivateKey = System.getProperty("user.home") + "/" + privateKeyFileName;
+            String filePathForPublicKey = System.getProperty("user.dir") + "/" + publicKeyFileName;
+
             String homeDir = System.getProperty("user.home");
             String filePathForPrivateKey = homeDir + "/" + privateKeyFileName;
             String filePathForPublicKey = "../bettervns/" + publicKeyFileName;
@@ -114,6 +118,22 @@ public class AuthRestController {
         }
     }
 
+    @GetMapping("/signin")
+    public ResponseEntity<?> sendLoginUserResponse(@CurrentSecurityContext SecurityContext context) {
+        Object principal = context.getAuthentication().getPrincipal();
+        if (Objects.equals(principal.toString(), "anonymousUser")) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping("/signout")
+    public ResponseEntity<?> sendLogoutUserResponse(@CurrentSecurityContext SecurityContext context) {
+        Object principal = context.getAuthentication().getPrincipal();
+        if (!Objects.equals(principal.toString(), "anonymousUser")) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
+
     @PostMapping("/signout")
     public ResponseEntity<?> logoutUser(@CurrentSecurityContext SecurityContext context) {
         Object principal = context.getAuthentication().getPrincipal();
@@ -121,7 +141,6 @@ public class AuthRestController {
             Long userId = ((UserDetailsImpl) principal).getId();
             refreshTokenService.deleteByUserId(userId);
         }
-
         ResponseCookie jwtCookie = jwtUtils.getCleanJwtCookie();
         ResponseCookie jwtRefreshCookie = jwtUtils.getCleanJwtRefreshCookie();
         HttpHeaders headers = new HttpHeaders();
@@ -147,7 +166,6 @@ public class AuthRestController {
                     .orElseThrow(() -> new TokenRefreshException(refreshToken,
                             "Refresh token is not in database!"));
         }
-
         return ResponseEntity.badRequest().body(new MessageResponse("Refresh Token is empty!"));
     }
 }
