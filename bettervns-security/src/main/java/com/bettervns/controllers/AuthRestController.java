@@ -85,6 +85,10 @@ public class AuthRestController {
             String filePathForPrivateKey = System.getProperty("user.home") + "/" + privateKeyFileName;
             String filePathForPublicKey = System.getProperty("user.dir") + "/" + publicKeyFileName;
 
+            String homeDir = System.getProperty("user.home");
+            String filePathForPrivateKey = homeDir + "/" + privateKeyFileName;
+            String filePathForPublicKey = "../bettervns/" + publicKeyFileName;
+
             File privateFile = new File(filePathForPrivateKey);
             boolean created = privateFile.createNewFile();
             File publicFile = new File(filePathForPublicKey);

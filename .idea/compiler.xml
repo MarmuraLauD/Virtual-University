@@ -9,14 +9,18 @@
         <outputRelativeToContentRoot value="true" />
         <module name="studying-service" />
         <module name="bettervns-backend" />
+        <module name="teachers-service" />
         <module name="students-service" />
-        <module name="bettervns" />
         <module name="api-gateway" />
         <module name="bettervns-security" />
         <module name="eureka-server" />
         <module name="admin-service" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="bettervns" target="16" />
+      <module name="teachersservice" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -26,6 +30,7 @@
       <module name="eureka-server" options="-parameters" />
       <module name="students-service" options="-parameters" />
       <module name="studying-service" options="-parameters" />
+      <module name="teachers-service" options="-parameters" />
     </option>
   </component>
 </project>

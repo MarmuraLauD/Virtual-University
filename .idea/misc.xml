@@ -10,11 +10,12 @@
         <option value="$PROJECT_DIR$/bettervns-security/pom.xml" />
         <option value="$PROJECT_DIR$/admin-service/pom.xml" />
         <option value="$PROJECT_DIR$/students-service/pom.xml" />
+        <option value="$PROJECT_DIR$/teachers-service/pom.xml" />
         <option value="$PROJECT_DIR$/studying-service/pom.xml" />
       </list>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="openjdk-19" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="openjdk-20" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="ProjectType">
