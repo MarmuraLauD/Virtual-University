@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +32,15 @@ public class AppointmentDAO {
     public List<Appointment> showForGroupByDate(int group_id, Date date){
         //Not yet implemented
         return null;
+    }
+
+    public List<List<Appointment>> showForGroupByWeek(int group_id, Date startDay, Date endDay){
+        //5 days - 5 calls showForGroupByDate(date) -> put to list atd return List<List<Appointment>>
+        List week = new ArrayList<List<Appointment>>();
+        for (Date curDay = startDay; curDay.before(endDay); curDay.setDate(curDay.getDate() + 1)){
+            week.add(showForGroupByDate(group_id, curDay));
+        }
+        return week;
     }
 
     public void addAppointment(Appointment appointment) {
