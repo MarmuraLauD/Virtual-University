@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.bettervns</groupId>
-    <artifactId>bettervns</artifactId>
+    <artifactId>bettervns-backend</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>

@@ -32,12 +32,12 @@ public class StudentDAO {
     public void addStudent(Student student) {
         studentsJdbcTemplate.update("INSERT INTO student(name, surname, father, date, email, group_id) " +
                         "VALUES(?, ?, ?, ?, ?, ?)",
-                student.getName(), student.getSurname(), student.getFather(), student.getDate(), student.getEmail(), student.getGroupId());
+                student.getName(), student.getSurname(), student.getFather(), student.getDate(), student.getEmail(), student.getGroup());
     }
 
     public void update(int id, Student student) {
         studentsJdbcTemplate.update("UPDATE student SET name = ?, surname = ?, father = ?, date = ?, email = ?, group_id = ? WHERE id=?",
-                student.getName(), student.getSurname(), student.getFather(), student.getDate(), student.getEmail(), student.getGroupId(), id);
+                student.getName(), student.getSurname(), student.getFather(), student.getDate(), student.getEmail(), student.getGroup(), id);
     }
 
     public void delete(int id) {
