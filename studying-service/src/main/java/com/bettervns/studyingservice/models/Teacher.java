@@ -1,10 +1,9 @@
-package com.bettervns.teachersservice.models;
+package com.bettervns.studyingservice.models;
 
-import com.bettervns.studyingservice.models.Appointment;
-import com.bettervns.studyingservice.models.Department;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 @NoArgsConstructor

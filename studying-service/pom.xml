@@ -73,6 +73,17 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+        <!--<dependency>
+            <groupId>com.bettervns</groupId>
+            <artifactId>teachers-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.0.Final</version>
+        </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>

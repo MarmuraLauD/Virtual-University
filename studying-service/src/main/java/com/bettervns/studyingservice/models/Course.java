@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,11 +28,64 @@ public class Course {
     @JoinColumn(name = "department_id")
     private Department department;
 
+    @ManyToMany
+    @JoinTable(
+            name = "course_group",
+            joinColumns = @JoinColumn(name = "course_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private List<Group> registeredGroups;
+
+    public Course(String name, Department teacher, Department department, List<Group> registeredGroups) {
+        this.name = name;
+        this.teacher = teacher;
+        this.department = department;
+        this.registeredGroups = registeredGroups;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Department getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Department teacher) {
+        this.teacher = teacher;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public List<Group> getRegisteredGroups() {
+        return registeredGroups;
+    }
+
+    public void setRegisteredGroups(List<Group> registeredGroups) {
+        this.registeredGroups = registeredGroups;
+    }
+
     @Override
     public String toString() {
         return "Course{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", teacher=" + teacher +
                 ", department=" + department +
                 '}';

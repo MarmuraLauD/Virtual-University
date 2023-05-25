@@ -20,13 +20,13 @@ public class StudentsController {
 
     @GetMapping("/students")
     public ResponseEntity<?> index(){
-        System.out.println(new Gson().toJson(studentDAO.index()));
-        return ResponseEntity.ok(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(studentDAO.index()));
+        System.out.println(new Gson().toJson(studentDAO.getAllStudents()));
+        return ResponseEntity.ok(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(studentDAO.getAllStudents()));
     }
 
     @GetMapping("/student/{id}")
     public ResponseEntity<?> show(@PathVariable("id") int id){
-        return ResponseEntity.ok(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(studentDAO.show(id)));
+        return ResponseEntity.ok(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(studentDAO.getStudentById(id)));
     }
 
     /*@GetMapping("/students/group/{id}")

@@ -3,6 +3,7 @@ package com.bettervns.studyingservice.models;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,10 +22,27 @@ public class Group {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    public Group(String name, int studyingYear, Department department) {
+    @ManyToMany(mappedBy = "registeredGroups")
+    private List<Course> courses;
+
+    @ManyToMany(mappedBy = "allowed_groups")
+    private List<Appointment> scheduled_appointments;
+
+    public Group(String name, int studyingYear, Department department, List<Course> courses,
+                 List<Appointment> appointments) {
         this.name = name;
         this.studyingYear = studyingYear;
         this.department = department;
+        this.courses = courses;
+        this.scheduled_appointments = appointments;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -51,13 +69,31 @@ public class Group {
         this.department = department;
     }
 
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
+
+    public List<Appointment> getAppointments() {
+        return scheduled_appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.scheduled_appointments = appointments;
+    }
+
     @Override
     public String toString() {
         return "Group{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", studyingYear=" + studyingYear +
-                ", departmentId=" + department.getId() +
+                ", department_id=" + department.getId() +
+                ", courses=" + courses +
+                ", scheduled_appointments=" + scheduled_appointments +
                 '}';
     }
 }
