@@ -1,42 +1,55 @@
 package com.bettervns.studyingservice.dao;
 
 import com.bettervns.studyingservice.models.Course;
+import com.bettervns.studyingservice.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class CourseDAO {
-    private final JdbcTemplate coreJdbcTemplate;
+
+    private final CourseRepository CourseRepository;
 
     @Autowired
-    public CourseDAO(JdbcTemplate coreJdbcTemplate) {
-        this.coreJdbcTemplate = coreJdbcTemplate;
+    public CourseDAO(CourseRepository CourseRepository) {
+        this.CourseRepository = CourseRepository;
     }
 
-    public List<Course> index() {
-        return coreJdbcTemplate.query("SELECT * FROM course", new CourseMapper());
+    public List<Course> getAllCourses() {
+        return CourseRepository.findAll();
     }
 
-    public Course show(int id) {
-        return coreJdbcTemplate.query("SELECT * FROM course WHERE id = ?", new Object[]{id},
-                new CourseMapper()).stream().findAny().orElse(null);
+    public Course getCourseById(int id) {
+        Optional<Course> courses = CourseRepository.findById(id);
+        if (courses.isPresent()) {
+            return courses.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+        }
     }
 
-    public void addCourse(Course course) {
-        coreJdbcTemplate.update("INSERT INTO course(name, department_id, teacher_id) VALUES(?, ?, ?)",
-                course.getName(), course.getDepartmentId(), course.getTeacherId());
+    public Course add(Course course) {
+        return CourseRepository.save(course);
     }
 
-    public void update(int id, Course course) {
-        coreJdbcTemplate.update("UPDATE course SET name = ?, department_id = ?, teacher_id = ? WHERE id=?",
-                course.getName(), course.getDepartmentId(), course.getTeacherId(), id);
+    public void update(int id, Course updatedCourse) {
+        Optional<Course> optionalCourse = CourseRepository.findById(id);
+        if (optionalCourse.isPresent()) {
+            Course coursei = optionalCourse.get();
+            coursei.setName(updatedCourse.getName());
+            coursei.setDepartment(updatedCourse.getDepartment());
+            coursei.setTeacher(updatedCourse.getTeacher());
+            CourseRepository.save(coursei);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+        }
     }
 
     public void delete(int id) {
-        coreJdbcTemplate.update("DELETE FROM course WHERE id = ?", id);
+        CourseRepository.deleteById(id);
     }
-
 }

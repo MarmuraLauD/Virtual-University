@@ -1,3 +1,4 @@
+/*
 package com.bettervns.studyingservice.controllers;
 
 import com.bettervns.studyingservice.dao.AppointmentDAO;
@@ -39,4 +40,4 @@ public class AppointmentsController {
         //return ResponseEntity.ok(new Gson().toJson(appointmentDAO.showForGroupByWeek(group_id)));
         return null;
     }
-}
+}*/

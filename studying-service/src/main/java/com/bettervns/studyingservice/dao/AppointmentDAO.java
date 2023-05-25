@@ -1,3 +1,4 @@
+/*
 package com.bettervns.studyingservice.dao;
 
 import com.bettervns.studyingservice.models.Appointment;
@@ -60,4 +61,4 @@ public class AppointmentDAO {
     public void delete(int id) {
         coreJdbcTemplate.update("DELETE FROM appointment WHERE id = ?", id);
     }
-}
+}*/

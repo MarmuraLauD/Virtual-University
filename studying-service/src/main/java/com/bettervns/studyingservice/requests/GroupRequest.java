@@ -1,6 +1,6 @@
-package com.bettervns.adminservice.requests;
+package com.bettervns.studyingservice.requests;
 
-public record NewGroupRequest(
+public record GroupRequest(
         String name,
         String studyingYear,
         String departmentId

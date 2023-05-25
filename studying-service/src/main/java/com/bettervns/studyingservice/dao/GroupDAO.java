@@ -1,43 +1,55 @@
 package com.bettervns.studyingservice.dao;
 
-import com.bettervns.studyingservice.models.Department;
 import com.bettervns.studyingservice.models.Group;
+import com.bettervns.studyingservice.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class GroupDAO {
 
-    private final JdbcTemplate coreJdbcTemplate;
+    private final GroupRepository groupRepository;
 
     @Autowired
-    public GroupDAO(JdbcTemplate coreJdbcTemplate) {
-        this.coreJdbcTemplate = coreJdbcTemplate;
+    public GroupDAO(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
     }
 
-    public List<Group> index() {
-        return coreJdbcTemplate.query("SELECT * FROM students_group ", new GroupMapper());
+    public List<Group> getAllGroups() {
+        return groupRepository.findAll();
     }
 
-    public Group show(int id) {
-        return coreJdbcTemplate.query("SELECT * FROM students_group WHERE id = ?", new Object[]{id},
-                new GroupMapper()).stream().findAny().orElse(null);
+    public Group getGroupById(int id) {
+        Optional<Group> groups = groupRepository.findById(id);
+        if (groups.isPresent()) {
+            return groups.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+        }
     }
 
-    public void addGroup(Group group) {
-        coreJdbcTemplate.update("INSERT INTO students_group(name, studying_year, department_id) VALUES(?, ?, ?)",
-                group.getName(), group.getStudyingYear(), group.getDepartmentId());
+    public Group add(Group group) {
+        return groupRepository.save(group);
     }
 
-    public void update(int id, Group group) {
-        coreJdbcTemplate.update("UPDATE students_group SET name = ?, studying_year = ?, department_id = ? WHERE id=?",
-                group.getName(), group.getStudyingYear(), group.getDepartmentId(), id);
+    public void update(int id, Group updatedGroup) {
+        Optional<Group> optionalGroup = groupRepository.findById(id);
+        if (optionalGroup.isPresent()) {
+            Group groupi = optionalGroup.get();
+            groupi.setName(updatedGroup.getName());
+            groupi.setStudyingYear(updatedGroup.getStudyingYear());
+            groupi.setDepartment(updatedGroup.getDepartment());
+            groupRepository.save(groupi);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+        }
     }
 
     public void delete(int id) {
-        coreJdbcTemplate.update("DELETE FROM students_group WHERE id = ?", id);
+        groupRepository.deleteById(id);
     }
 }

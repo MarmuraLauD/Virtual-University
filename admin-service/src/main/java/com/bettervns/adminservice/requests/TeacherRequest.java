@@ -1,6 +1,6 @@
 package com.bettervns.adminservice.requests;
 
-public record NewTeacherRequest(
+public record TeacherRequest(
     String name,
     String surname,
     String father,

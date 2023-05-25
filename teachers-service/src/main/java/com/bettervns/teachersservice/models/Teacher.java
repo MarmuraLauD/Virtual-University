@@ -1,10 +1,14 @@
 package com.bettervns.teachersservice.models;
 
-
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "teacher")
 public class Teacher {
 
@@ -12,7 +16,7 @@ public class Teacher {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "teacher_name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "surname", nullable = false)
     private String surname;
@@ -23,44 +27,11 @@ public class Teacher {
     @Column(name = "chair_id", nullable = false)
     private int chair_id;
 
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public Teacher(String name, String surname, String father_name, String email, int chair_id) {
         this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
         this.surname = surname;
-    }
-
-    public String getFather_name() {
-        return father_name;
-    }
-
-    public void setFather_name(String father_name) {
         this.father_name = father_name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
         this.email = email;
-    }
-
-    public int getChair_id() {
-        return chair_id;
-    }
-
-    public void setChair_id(int chair_id) {
         this.chair_id = chair_id;
     }
 

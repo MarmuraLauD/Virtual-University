@@ -1,6 +1,6 @@
 package com.bettervns.adminservice.controllers;
 
-import com.bettervns.adminservice.requests.NewStudentRequest;
+import com.bettervns.adminservice.requests.StudentRequest;
 import com.google.gson.GsonBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class StudentsController {
     }
 
     @PostMapping()
-    public String createStudent(@RequestBody NewStudentRequest requestObject){
+    public String createStudent(@RequestBody StudentRequest requestObject){
         String message = "create " + 0 + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(STUDENTS_QUEUE_KEY, message);
@@ -29,7 +29,7 @@ public class StudentsController {
     }
 
     @PatchMapping("/{id}")
-    public String updateStudent(@RequestBody NewStudentRequest requestObject, @PathVariable("id") int id){
+    public String updateStudent(@RequestBody StudentRequest requestObject, @PathVariable("id") int id){
         String message = "update " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(STUDENTS_QUEUE_KEY, message);

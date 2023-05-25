@@ -1,3 +1,4 @@
+/*
 package com.bettervns.studyingservice.controllers;
 
 import com.bettervns.studyingservice.dao.CourseDAO;
@@ -29,3 +30,4 @@ public class CoursesController {
         return ResponseEntity.ok(new Gson().toJson(courseDAO.show(id)));
     }
 }
+*/
