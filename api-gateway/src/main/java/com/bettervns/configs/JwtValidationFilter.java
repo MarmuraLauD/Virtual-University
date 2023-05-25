@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -45,7 +46,12 @@ public class JwtValidationFilter implements GatewayFilter, Ordered {
     }
 
     private boolean isValidToken(ServerWebExchange exchange) {
-        String authToken = parseJwt((HttpServletRequest) exchange.getRequest());
+        HttpHeaders headers = exchange.getRequest().getHeaders();
+        String authHeader = headers.getFirst("Authorization");
+        String authToken;
+        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+            authToken = authHeader.substring(7);
+        } else return false;
         try {
             Jwts
                     .parserBuilder()
@@ -69,11 +75,16 @@ public class JwtValidationFilter implements GatewayFilter, Ordered {
     }
 
     private boolean isValidRole(ServerWebExchange exchange) {
-        String authToken = parseJwt((HttpServletRequest) exchange.getRequest());
+        HttpHeaders headers = exchange.getRequest().getHeaders();
+        String authHeader = headers.getFirst("Authorization");
+        String authToken;
+        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+            authToken = authHeader.substring(7);
+        } else return false;
         Set<String> roles = getRoleFromJwtToken(authToken);
         boolean isValid = false;
         for (String role : roles) {
-            if (roleAttribute.equals("ROLE_ANYONE") || role.equals("ROLE_ADMIN")) isValid = true;
+            if (role.equals("ROLE_ADMIN")) isValid = true;
             else isValid = role.equals(roleAttribute);
         }
         return isValid;

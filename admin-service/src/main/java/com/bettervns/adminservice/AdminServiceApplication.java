@@ -1,8 +1,5 @@
 package com.bettervns.adminservice;
 
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -23,8 +20,8 @@ public class AdminServiceApplication {
         DriverManagerDataSource datasource = new DriverManagerDataSource();
         datasource.setDriverClassName("com.mysql.jdbc.Driver");
         datasource.setUrl("jdbc:mysql://localhost:3306/admins?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true");
-        datasource.setUsername("danyil");
-        datasource.setPassword("Grisha_sobaka1");
+        datasource.setUsername("root");
+        datasource.setPassword("Vladmarmura2002");
         return datasource;
     }
 
