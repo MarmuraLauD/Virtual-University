@@ -42,7 +42,7 @@ public class GroupDAO {
             Group groupi = optionalGroup.get();
             groupi.setName(updatedGroup.getName());
             groupi.setStudyingYear(updatedGroup.getStudyingYear());
-            groupi.setDepartment(updatedGroup.getDepartment());
+            groupi.setDepartmentId(updatedGroup.getDepartmentId());
             groupRepository.save(groupi);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");

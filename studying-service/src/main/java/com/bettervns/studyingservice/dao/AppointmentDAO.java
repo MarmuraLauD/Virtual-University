@@ -44,9 +44,8 @@ public class AppointmentDAO {
             appointmenti.setEndTime(updatedAppointment.getEndTime());
             appointmenti.setDate(updatedAppointment.getDate());
             appointmenti.setMeetingLink(updatedAppointment.getMeetingLink());
-            appointmenti.setTeacher(updatedAppointment.getTeacher());
-            appointmenti.setCourse(updatedAppointment.getCourse());
-            appointmenti.setAllowed_groups(updatedAppointment.getAllowed_groups());
+            appointmenti.setTeacherId(updatedAppointment.getTeacherId());
+            appointmenti.setCourseId(updatedAppointment.getCourseId());
             AppointmentRepository.save(appointmenti);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");

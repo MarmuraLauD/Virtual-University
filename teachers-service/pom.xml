@@ -63,11 +63,6 @@
             <artifactId>spring-rabbit</artifactId>
             <version>3.0.2</version>
         </dependency>
-        <dependency>
-            <groupId>com.bettervns</groupId>
-            <artifactId>studying-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>

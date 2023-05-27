@@ -22,15 +22,6 @@ public class Department {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
-    private List<Group> groups;
-
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
-    private List<Course> courses;
-
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
-    private List<Teacher> teachers;
-
     public int getId() {
         return id;
     }
@@ -61,30 +52,6 @@ public class Department {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public List<Group> getGroups() {
-        return groups;
-    }
-
-    public void setGroups(List<Group> groups) {
-        this.groups = groups;
-    }
-
-    public List<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
-    }
-
-    public List<Teacher> getTeachers() {
-        return teachers;
-    }
-
-    public void setTeachers(List<Teacher> teachers) {
-        this.teachers = teachers;
     }
 
     public Department(String name, String phone, String email) {

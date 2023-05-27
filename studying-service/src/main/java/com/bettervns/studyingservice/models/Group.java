@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -19,35 +18,13 @@ public class Group {
     @Column(name = "studying_year", nullable = false)
     private int studyingYear;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id")
-    private Department department;
+    @Column(name = "department_id")
+    private int departmentId;
 
-    @ManyToMany(mappedBy = "registeredGroups")
-    private List<Course> courses;
-
-    @ManyToMany(mappedBy = "allowed_groups")
-    private List<Appointment> scheduled_appointments;
-
-    public Group(String name, int studyingYear, Department department, List<Course> courses,
-                 List<Appointment> appointments) {
+    public Group(String name, int studyingYear, int departmentId) {
         this.name = name;
         this.studyingYear = studyingYear;
-        this.department = department;
-        this.courses = courses;
-        this.scheduled_appointments = appointments;
-    }
-
-    public Group(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        this.departmentId = departmentId;
     }
 
     public String getName() {
@@ -66,28 +43,12 @@ public class Group {
         this.studyingYear = studyingYear;
     }
 
-    public Department getDepartment() {
-        return department;
+    public int getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
-
-    public List<Course> getCourses() {
-        return courses;
-    }
-
-    public void setCourses(List<Course> courses) {
-        this.courses = courses;
-    }
-
-    public List<Appointment> getAppointments() {
-        return scheduled_appointments;
-    }
-
-    public void setAppointments(List<Appointment> appointments) {
-        this.scheduled_appointments = appointments;
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 
     @Override
@@ -96,9 +57,7 @@ public class Group {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", studyingYear=" + studyingYear +
-                ", department_id=" + department.getId() +
-                ", courses=" + courses +
-                ", scheduled_appointments=" + scheduled_appointments +
+                ", departmentId=" + departmentId +
                 '}';
     }
 }

@@ -16,7 +16,6 @@
         <module>studying-service</module>
         <module>teachers-service</module>
         <module>students-service</module>
-        <module>ddl-service</module>
     </modules>
 
     <properties>

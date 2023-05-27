@@ -1,7 +1,7 @@
-package com.bettervns.studyingservice.dao;
+package com.bettervns.teachersservice.dao;
 
-import com.bettervns.studyingservice.models.Teacher;
-import com.bettervns.studyingservice.repository.TeacherRepository;
+import com.bettervns.teachersservice.models.Teacher;
+import com.bettervns.teachersservice.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
@@ -45,7 +45,7 @@ public class TeacherDAO {
             teacher.setSurname(updatedTeacher.getSurname());
             teacher.setFather(updatedTeacher.getFather());
             teacher.setEmail(updatedTeacher.getEmail());
-            teacher.setDepartment(updatedTeacher.getDepartment());
+            teacher.setDepartmentId(updatedTeacher.getDepartmentId());
             teacherRepository.save(teacher);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");

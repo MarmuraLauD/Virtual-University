@@ -41,8 +41,8 @@ public class CourseDAO {
         if (optionalCourse.isPresent()) {
             Course coursei = optionalCourse.get();
             coursei.setName(updatedCourse.getName());
-            coursei.setDepartment(updatedCourse.getDepartment());
-            coursei.setTeacher(updatedCourse.getTeacher());
+            coursei.setDepartmentId(updatedCourse.getDepartmentId());
+            coursei.setTeacherId(updatedCourse.getTeacherId());
             CourseRepository.save(coursei);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");

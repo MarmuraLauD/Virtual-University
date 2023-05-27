@@ -1,19 +1,19 @@
-package com.bettervns.studyingservice.models;
+package com.bettervns.studentsservice.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.sql.Date;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "teacher")
-public class Teacher {
-
+@Table(name = "student")
+public class Student {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "name", nullable = false)
@@ -22,33 +22,23 @@ public class Teacher {
     private String surname;
     @Column(name = "father", nullable = false)
     private String father;
+
+    @Column(name = "date", nullable = false)
+    private Date date;
+
     @Column(name = "email", nullable = false)
     private String email;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id")
-    private Department department;
+    @Column(name = "group_id")
+    private int groupId;
 
-    @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)
-    private List<Appointment> scheduled_appointments;
-
-    @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)
-    private List<Appointment> courses;
-
-    public Teacher(String name, String surname, String father, String email, Department department) {
+    public Student(String name, String surname, String father, Date date, String email, int groupId) {
         this.name = name;
         this.surname = surname;
         this.father = father;
+        this.date = date;
         this.email = email;
-        this.department = department;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        this.groupId = groupId;
     }
 
     public String getName() {
@@ -75,6 +65,14 @@ public class Teacher {
         this.father = father;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -83,23 +81,24 @@ public class Teacher {
         this.email = email;
     }
 
-    public Department getDepartment() {
-        return department;
+    public int getGroupId() {
+        return groupId;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
     @Override
     public String toString() {
-        return "Teacher{" +
+        return "Student{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", father='" + father + '\'' +
+                ", date=" + date +
                 ", email='" + email + '\'' +
-                ", department_id=" + department.getId() +
+                ", groupId=" + groupId +
                 '}';
     }
 }

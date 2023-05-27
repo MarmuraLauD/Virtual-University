@@ -1,8 +1,7 @@
 package com.bettervns.studentsservice.rabbitmq;
 
 import com.bettervns.studentsservice.dao.StudentDAO;
-import com.bettervns.studyingservice.models.Group;
-import com.bettervns.studyingservice.models.Student;
+import com.bettervns.studentsservice.models.Student;
 import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -41,7 +40,7 @@ public class MessageProcessor {
     public void createStudent(String studentParams, int id){
         Student student = new GsonBuilder().setDateFormat("yyyy-MM-dd").create().fromJson(studentParams, Student.class);
         System.out.println(id);
-        student.setGroup(new Group(id));
+        student.setGroupId(id);
         studentDAO.add(student);
     }
 }

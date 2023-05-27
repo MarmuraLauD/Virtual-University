@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -16,38 +15,17 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "teacher_id", nullable = false)
+    private int teacherId;
+    @Column(name = "department_id", nullable = false)
+    private int departmentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacher_id")
-    private Teacher teacher;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id")
-    private Department department;
-
-    @ManyToMany
-    @JoinTable(
-            name = "course_group",
-            joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id"))
-    private List<Group> registeredGroups;
-
-    public Course(String name, Teacher teacher, Department department, List<Group> registeredGroups) {
+    public Course(String name, int teacherId, int departmentId) {
         this.name = name;
-        this.teacher = teacher;
-        this.department = department;
-        this.registeredGroups = registeredGroups;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        this.teacherId = teacherId;
+        this.departmentId = departmentId;
     }
 
     public String getName() {
@@ -58,36 +36,29 @@ public class Course {
         this.name = name;
     }
 
-    public Teacher getTeacher() {
-        return teacher;
+    public int getTeacherId() {
+        return teacherId;
     }
 
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
+    public void setTeacherId(int teacherId) {
+        this.teacherId = teacherId;
     }
 
-    public Department getDepartment() {
-        return department;
+    public int getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
-    }
-
-    public List<Group> getRegisteredGroups() {
-        return registeredGroups;
-    }
-
-    public void setRegisteredGroups(List<Group> registeredGroups) {
-        this.registeredGroups = registeredGroups;
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 
     @Override
     public String toString() {
         return "Course{" +
-                "name='" + name + '\'' +
-                ", teacher=" + teacher +
-                ", department=" + department +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", teacherId=" + teacherId +
+                ", departmentId=" + departmentId +
                 '}';
     }
 }
