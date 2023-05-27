@@ -1,6 +1,5 @@
-package com.bettervns.studentsservice.models;
+package com.bettervns.studyingservice.models;
 
-import com.bettervns.studyingservice.models.Group;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

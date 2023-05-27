@@ -1,7 +1,7 @@
-package com.bettervns.studentsservice.dao;
+package com.bettervns.studyingservice.dao;
 
-import com.bettervns.studentsservice.repository.StudentRepository;
 import com.bettervns.studyingservice.models.Student;
+import com.bettervns.studyingservice.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;

@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="studying-service" />
-        <module name="bettervns-backend" />
         <module name="teachers-service" />
         <module name="students-service" />
         <module name="api-gateway" />
@@ -19,6 +18,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="bettervns" target="16" />
+      <module name="ddl-service" target="17" />
       <module name="teachersservice" target="17" />
     </bytecodeTargetLevel>
   </component>
@@ -27,6 +27,7 @@
       <module name="admin-service" options="-parameters" />
       <module name="api-gateway" options="-parameters" />
       <module name="bettervns-security" options="-parameters" />
+      <module name="ddl-service" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
       <module name="students-service" options="-parameters" />
       <module name="studying-service" options="-parameters" />

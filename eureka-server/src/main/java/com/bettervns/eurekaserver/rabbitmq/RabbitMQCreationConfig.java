@@ -19,7 +19,7 @@ public class RabbitMQCreationConfig {
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory factory = new CachingConnectionFactory(RABBIT_HOST_NAME);
         factory.setUsername("bettervns");
-        factory.setPassword("grisha_sobaka1");
+        factory.setPassword("bettervns");
         return factory;
     }
 

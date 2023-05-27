@@ -1,4 +1,3 @@
-/*
 package com.bettervns.studyingservice.controllers;
 
 import com.bettervns.studyingservice.dao.AppointmentDAO;
@@ -20,12 +19,12 @@ public class AppointmentsController {
 
     @GetMapping("/appointments")
     public ResponseEntity<?> index(){
-        return ResponseEntity.ok(new Gson().toJson(appointmentDAO.index()));
+        return ResponseEntity.ok(new Gson().toJson(appointmentDAO.getAllAppointments()));
     }
 
     @GetMapping("/appointment/{id}")
     public ResponseEntity<?> show(@PathVariable("id") int id) {
-        return ResponseEntity.ok(new Gson().toJson(appointmentDAO.show(id)));
+        return ResponseEntity.ok(new Gson().toJson(appointmentDAO.getAppointmentById(id)));
     }
 
     // TODO : TRY java.util.Date here, and MB replace import to java.sql.Date
@@ -40,4 +39,4 @@ public class AppointmentsController {
         //return ResponseEntity.ok(new Gson().toJson(appointmentDAO.showForGroupByWeek(group_id)));
         return null;
     }
-}*/
+}

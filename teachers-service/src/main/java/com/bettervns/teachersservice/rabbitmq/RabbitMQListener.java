@@ -22,8 +22,8 @@ public class RabbitMQListener {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory factory = new CachingConnectionFactory("localhost");
-        factory.setUsername("admin");
-        factory.setPassword("grisha_sobaka1");
+        factory.setUsername("bettervns");
+        factory.setPassword("bettervns");
         return factory;
     }
 

@@ -1,11 +1,12 @@
-package com.bettervns.teachersservice.dao;
+package com.bettervns.studyingservice.dao;
 
-import com.bettervns.teachersservice.models.Teacher;
-import com.bettervns.teachersservice.repository.TeacherRepository;
+import com.bettervns.studyingservice.models.Teacher;
+import com.bettervns.studyingservice.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.server.ResponseStatusException;
+
 import java.util.List;
 import java.util.Optional;
 

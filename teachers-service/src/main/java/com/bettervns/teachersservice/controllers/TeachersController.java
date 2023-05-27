@@ -1,7 +1,7 @@
 package com.bettervns.teachersservice.controllers;
 
+import com.bettervns.ddlservice.models.Teacher;
 import com.bettervns.teachersservice.dao.TeacherDAO;
-import com.bettervns.teachersservice.models.Teacher;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

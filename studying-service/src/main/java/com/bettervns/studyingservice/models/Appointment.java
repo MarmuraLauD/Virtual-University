@@ -3,8 +3,9 @@ package com.bettervns.studyingservice.models;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import java.sql.Time;
+
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 
 @AllArgsConstructor

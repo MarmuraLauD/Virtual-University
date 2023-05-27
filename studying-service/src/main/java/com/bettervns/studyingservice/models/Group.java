@@ -3,6 +3,7 @@ package com.bettervns.studyingservice.models;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 @Data
@@ -35,6 +36,10 @@ public class Group {
         this.department = department;
         this.courses = courses;
         this.scheduled_appointments = appointments;
+    }
+
+    public Group(int id) {
+        this.id = id;
     }
 
     public int getId() {

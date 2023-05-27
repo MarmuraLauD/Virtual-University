@@ -1,4 +1,4 @@
-/*
+
 package com.bettervns.studyingservice.controllers;
 
 import com.bettervns.studyingservice.dao.CourseDAO;
@@ -22,12 +22,11 @@ public class CoursesController {
 
     @GetMapping("/courses")
     public ResponseEntity<?> index(){
-        return ResponseEntity.ok(new Gson().toJson(courseDAO.index()));
+        return ResponseEntity.ok(new Gson().toJson(courseDAO.getAllCourses()));
     }
 
     @GetMapping("/course/{id}")
     public ResponseEntity<?> show(@PathVariable("id") int id){
-        return ResponseEntity.ok(new Gson().toJson(courseDAO.show(id)));
+        return ResponseEntity.ok(new Gson().toJson(courseDAO.getCourseById(id)));
     }
 }
-*/

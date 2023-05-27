@@ -29,8 +29,11 @@ public class Teacher {
     @JoinColumn(name = "department_id")
     private Department department;
 
-    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)
     private List<Appointment> scheduled_appointments;
+
+    @OneToMany(mappedBy = "teacher", fetch = FetchType.LAZY)
+    private List<Appointment> courses;
 
     public Teacher(String name, String surname, String father, String email, Department department) {
         this.name = name;
@@ -100,4 +103,3 @@ public class Teacher {
                 '}';
     }
 }
-

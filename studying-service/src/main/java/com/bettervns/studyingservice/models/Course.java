@@ -22,7 +22,7 @@ public class Course {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacher_id")
-    private Department teacher;
+    private Teacher teacher;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
@@ -35,7 +35,7 @@ public class Course {
             inverseJoinColumns = @JoinColumn(name = "group_id"))
     private List<Group> registeredGroups;
 
-    public Course(String name, Department teacher, Department department, List<Group> registeredGroups) {
+    public Course(String name, Teacher teacher, Department department, List<Group> registeredGroups) {
         this.name = name;
         this.teacher = teacher;
         this.department = department;
@@ -58,11 +58,11 @@ public class Course {
         this.name = name;
     }
 
-    public Department getTeacher() {
+    public Teacher getTeacher() {
         return teacher;
     }
 
-    public void setTeacher(Department teacher) {
+    public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
 

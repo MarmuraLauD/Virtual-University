@@ -17,8 +17,8 @@ public class DepartmentsController {
     }
 
     @GetMapping("/departments")
-    public ResponseEntity<?> getAllDepartments() {
-        return ResponseEntity.ok(new Gson().toJson(departmentDAO.getAllDepartments()));
+    public String getAllDepartments() {
+        return (departmentDAO.getAllDepartments().toString());
     }
 
     @GetMapping("/department/{id}")
