@@ -1,9 +1,13 @@
 package com.bettervns.teachersservice.models;
 
-
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
+
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "teacher")
 public class Teacher {
@@ -12,17 +16,25 @@ public class Teacher {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "teacher_name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "surname", nullable = false)
     private String surname;
-    @Column(name = "father_name", nullable = false)
-    private String father_name;
+    @Column(name = "father", nullable = false)
+    private String father;
     @Column(name = "email", nullable = false)
     private String email;
-    @Column(name = "chair_id", nullable = false)
-    private int chair_id;
 
+    @Column(name = "department_id")
+    private int departmentId;
+
+    public Teacher(String name, String surname, String father, String email, int departmentId) {
+        this.name = name;
+        this.surname = surname;
+        this.father = father;
+        this.email = email;
+        this.departmentId = departmentId;
+    }
 
     public String getName() {
         return name;
@@ -40,12 +52,12 @@ public class Teacher {
         this.surname = surname;
     }
 
-    public String getFather_name() {
-        return father_name;
+    public String getFather() {
+        return father;
     }
 
-    public void setFather_name(String father_name) {
-        this.father_name = father_name;
+    public void setFather(String father) {
+        this.father = father;
     }
 
     public String getEmail() {
@@ -56,12 +68,12 @@ public class Teacher {
         this.email = email;
     }
 
-    public int getChair_id() {
-        return chair_id;
+    public int getDepartmentId() {
+        return departmentId;
     }
 
-    public void setChair_id(int chair_id) {
-        this.chair_id = chair_id;
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 
     @Override
@@ -70,10 +82,9 @@ public class Teacher {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", father_name='" + father_name + '\'' +
+                ", father='" + father + '\'' +
                 ", email='" + email + '\'' +
-                ", chair_id=" + chair_id +
+                ", departmentId=" + departmentId +
                 '}';
     }
 }
-

@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+
 @Component
 public class MessageProcessor {
 
@@ -21,7 +22,7 @@ public class MessageProcessor {
     public void processMessage(String message){
         String operationType = messageParser.getOperationType(message);
         switch (operationType) {
-            case "create" -> createStudent(messageParser.getMessageBody(message));
+            case "create" -> createStudent(messageParser.getMessageBody(message), messageParser.getId(message));
             case "update" -> updateStudent(messageParser.getMessageBody(message), messageParser.getId(message));
             case "delete" -> deleteStudent(messageParser.getId(message));
         }
@@ -36,8 +37,10 @@ public class MessageProcessor {
         studentDAO.update(id, student);
     }
 
-    public void createStudent(String studentParams){
+    public void createStudent(String studentParams, int id){
         Student student = new GsonBuilder().setDateFormat("yyyy-MM-dd").create().fromJson(studentParams, Student.class);
-        studentDAO.addStudent(student);
+        System.out.println(id);
+        student.setGroupId(id);
+        studentDAO.add(student);
     }
 }

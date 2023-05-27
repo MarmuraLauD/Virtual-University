@@ -1,53 +1,58 @@
 package com.bettervns.studyingservice.dao;
 
 import com.bettervns.studyingservice.models.Appointment;
+import com.bettervns.studyingservice.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-
-import java.util.Date;
+import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AppointmentDAO {
 
-    private final JdbcTemplate coreJdbcTemplate;
+    private final AppointmentRepository AppointmentRepository;
 
     @Autowired
-    public AppointmentDAO(JdbcTemplate coreJdbcTemplate) {
-        this.coreJdbcTemplate = coreJdbcTemplate;
+    public AppointmentDAO(AppointmentRepository AppointmentRepository) {
+        this.AppointmentRepository = AppointmentRepository;
     }
 
-    public List<Appointment> index() {
-        return coreJdbcTemplate.query("SELECT * FROM appointment", new AppointmentMapper());
+    public List<Appointment> getAllAppointments() {
+        return AppointmentRepository.findAll();
     }
 
-    public Appointment show(int id) {
-        return coreJdbcTemplate.query("SELECT * FROM appointment WHERE id = ?", new Object[]{id},
-                new AppointmentMapper()).stream().findAny().orElse(null);
+    public Appointment getAppointmentById(int id) {
+        Optional<Appointment> appointments = AppointmentRepository.findById(id);
+        if (appointments.isPresent()) {
+            return appointments.get();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+        }
     }
 
-    // TODO : implement this using JOIN in SQL querry, try java.util.Date and java.sql.Date
-    public List<Appointment> showForGroupByDate(int group_id, Date date){
-        //Not yet implemented
-        return null;
+    public Appointment add(Appointment appointment) {
+        return AppointmentRepository.save(appointment);
     }
 
-    public void addAppointment(Appointment appointment) {
-        coreJdbcTemplate.update("INSERT INTO appointment(teacher_id, begin_time, end_time, date, meeting_link," +
-                        " recording_id) VALUES(?, ?, ?, ?, ?, ?)",
-                appointment.getTeacherId(), appointment.getBegin_time(), appointment.getEnd_time(),
-                appointment.getDate(), appointment.getMeetingLink(), appointment.getRecordingId());
-    }
-
-    public void update(int id, Appointment appointment) {
-        coreJdbcTemplate.update("UPDATE appointment SET teacher_id = ?, begin_time = ?, end_time = ?, date = ?," +
-                        "meeting_link = ?, recording_id = ? WHERE id=?",
-                appointment.getTeacherId(), appointment.getBegin_time(), appointment.getEnd_time(),
-                appointment.getDate(), appointment.getMeetingLink(), appointment.getRecordingId(), id);
+    public void update(int id, Appointment updatedAppointment) {
+        Optional<Appointment> optionalAppointment = AppointmentRepository.findById(id);
+        if (optionalAppointment.isPresent()) {
+            Appointment appointmenti = optionalAppointment.get();
+            appointmenti.setBeginTime(updatedAppointment.getBeginTime());
+            appointmenti.setEndTime(updatedAppointment.getEndTime());
+            appointmenti.setDate(updatedAppointment.getDate());
+            appointmenti.setMeetingLink(updatedAppointment.getMeetingLink());
+            appointmenti.setTeacherId(updatedAppointment.getTeacherId());
+            appointmenti.setCourseId(updatedAppointment.getCourseId());
+            AppointmentRepository.save(appointmenti);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
+        }
     }
 
     public void delete(int id) {
-        coreJdbcTemplate.update("DELETE FROM appointment WHERE id = ?", id);
+        AppointmentRepository.deleteById(id);
     }
 }

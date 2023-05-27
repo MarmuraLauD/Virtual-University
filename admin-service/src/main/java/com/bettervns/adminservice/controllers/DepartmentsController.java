@@ -1,10 +1,10 @@
 package com.bettervns.adminservice.controllers;
 
-import com.bettervns.adminservice.requests.NewDepartmentRequest;
-import com.bettervns.adminservice.requests.NewGroupRequest;
+import com.bettervns.adminservice.requests.DepartmentRequest;
 import com.google.gson.GsonBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,28 +21,27 @@ public class DepartmentsController {
     }
 
     @PostMapping()
-    public String createDepartment(@RequestBody NewDepartmentRequest requestObject){
-        System.out.println(requestObject);
+    public ResponseEntity<?> createDepartment(@RequestBody DepartmentRequest requestObject){
         String message = "create " + "department " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
-        System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(STUDYING_QUEUE_KEY, message);
-        return "redirect:/admin/1";
+        return ResponseEntity.ok("Successfully added");
     }
 
     @PatchMapping("/{id}")
-    public String updateDepartment(@RequestBody NewDepartmentRequest requestObject, @PathVariable("id") int id){
+    public ResponseEntity<?> updateDepartment(@RequestBody DepartmentRequest requestObject, @PathVariable("id") int id){
         String message = "update " + "department " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(STUDYING_QUEUE_KEY, message);
-        return "redirect:/admin/1";
+        return ResponseEntity.ok("Successfully added");
+
     }
 
     @DeleteMapping ("/{id}")
-    public String deleteDepartment(@PathVariable("id") int id){
-        String message = new String("delete " + "department " + id);
+    public ResponseEntity<?> deleteDepartment(@PathVariable("id") int id){
+        String message = "delete " + "department " + id;
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(STUDYING_QUEUE_KEY, message);
-        return "redirect:/admin/1";
+        return ResponseEntity.ok("Successfully added");
     }
 }

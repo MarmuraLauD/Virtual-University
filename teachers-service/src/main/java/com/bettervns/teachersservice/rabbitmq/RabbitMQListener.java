@@ -1,4 +1,4 @@
-package com.bettervns.studyingservice.rabbitmq;
+package com.bettervns.teachersservice.rabbitmq;
 
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -9,7 +9,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQListener {
-    public static final String STUDYING_QUEUE_NAME = "studyingQueue";
+
+    public static final String TEACHERS_QUEUE_NAME = "teachersQueue";
+
     MessageProcessor processor;
 
     @Autowired
@@ -29,8 +31,9 @@ public class RabbitMQListener {
     public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory){
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(STUDYING_QUEUE_NAME);
+        container.setQueueNames(TEACHERS_QUEUE_NAME);
         container.setMessageListener(message -> {
+            System.out.println("Received from Queue: " + message.getBody());
             processor.processMessage(new String(message.getBody()));
         });
         return container;

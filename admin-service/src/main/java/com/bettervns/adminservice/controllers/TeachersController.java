@@ -1,6 +1,6 @@
 package com.bettervns.adminservice.controllers;
 
-import com.bettervns.adminservice.requests.NewTeacherRequest;
+import com.bettervns.adminservice.requests.TeacherRequest;
 import com.google.gson.GsonBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +20,15 @@ public class TeachersController {
     }
 
     @PostMapping()
-    public String createTeacher(@RequestBody NewTeacherRequest requestObject){
-        System.out.println(requestObject);
+    public String createTeacher(@RequestBody TeacherRequest requestObject){
         String message = "create " + "teacher " + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
-        System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(TEACHERS_QUEUE_KEY, message);
         return "redirect:/admin/1";
     }
 
     @PatchMapping("/{id}")
-    public String updateTeacher(@RequestBody NewTeacherRequest requestObject, @PathVariable("id") int id){
+    public String updateTeacher(@RequestBody TeacherRequest requestObject, @PathVariable("id") int id){
         String message = "update " + "teacher " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(TEACHERS_QUEUE_KEY, message);

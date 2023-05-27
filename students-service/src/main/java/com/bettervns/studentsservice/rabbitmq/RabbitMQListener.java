@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+
 @Configuration
 public class RabbitMQListener {
 
@@ -22,8 +25,8 @@ public class RabbitMQListener {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory factory = new CachingConnectionFactory("localhost");
-        factory.setUsername("admin");
-        factory.setPassword("grisha_sobaka1");
+        factory.setUsername("bettervns");
+        factory.setPassword("bettervns");
         return factory;
     }
 
@@ -33,8 +36,8 @@ public class RabbitMQListener {
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames(STUDENTS_QUEUE_NAME);
         container.setMessageListener(message -> {
-            System.out.println("Received from Queue: " + message.getBody());
-            processor.processMessage(new String(message.getBody()));
+            String messageBody = new String(message.getBody(), StandardCharsets.UTF_8);
+            processor.processMessage(messageBody);
         });
         return container;
     }
