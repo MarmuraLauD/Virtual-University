@@ -15,7 +15,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.util.List;
 
 @RestController
-@RequestMapping("/teachers")
+@RequestMapping()
 public class TeachersController {
 
     private final TeacherDAO teacherDAO;
@@ -44,10 +44,7 @@ public class TeachersController {
     }
 
 
-    @PostMapping()
-    public Teacher createTeacher(@RequestBody Teacher teacher) {
-        return teacherDAO.addTeacher(teacher);
-    }
+
 
 
 //    @PostMapping()
@@ -59,20 +56,20 @@ public class TeachersController {
 //    }
 //
 
-    @PatchMapping("/{id}")
-    public String update(@ModelAttribute("teacher") Teacher teacher, BindingResult bindingResult, @PathVariable("id") int id) {
-        System.out.println(teacher.toString());
-        if (bindingResult.hasErrors()) return "edit";
-        teacherDAO.update(id, teacher);
-        return "redirect:/teachers";
-    }
-
-
-
-    @DeleteMapping("/{id}")
-    public RedirectView delete(@PathVariable("id") int id) {
-        teacherDAO.deleteTeacher(id);
-        return new RedirectView("http://localhost:8080/teachers");
-    }
+//    @PatchMapping("/{id}")
+//    public String update(@ModelAttribute("teacher") Teacher teacher, BindingResult bindingResult, @PathVariable("id") int id) {
+//        System.out.println(teacher.toString());
+//        if (bindingResult.hasErrors()) return "edit";
+//        teacherDAO.update(id, teacher);
+//        return "redirect:/teachers";
+//    }
+//
+//
+//
+//    @DeleteMapping("/{id}")
+//    public RedirectView delete(@PathVariable("id") int id) {
+//        teacherDAO.deleteTeacher(id);
+//        return new RedirectView("http://localhost:8080/teachers");
+//    }
 //
 }

@@ -71,7 +71,7 @@ public class TeacherDAO {
             Teacher teacher = optionalTeacher.get();
             teacher.setName(updatedTeacher.getName());
             teacher.setSurname(updatedTeacher.getSurname());
-            teacher.setFather_name(updatedTeacher.getFather_name());
+            teacher.setFather(updatedTeacher.getFather());
             teacher.setEmail(updatedTeacher.getEmail());
             teacher.setChair_id(updatedTeacher.getChair_id());
             teacherRepository.save(teacher);

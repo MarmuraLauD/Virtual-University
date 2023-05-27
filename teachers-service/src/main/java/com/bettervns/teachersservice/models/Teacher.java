@@ -11,15 +11,15 @@ import java.util.Objects;
 public class Teacher {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "teacher_name", nullable = false)
     private String name;
     @Column(name = "surname", nullable = false)
     private String surname;
-    @Column(name = "father_name", nullable = false)
-    private String father_name;
+    @Column(name = "father", nullable = false)
+    private String father;
     @Column(name = "email", nullable = false)
     private String email;
     @Column(name = "chair_id", nullable = false)
@@ -42,12 +42,13 @@ public class Teacher {
         this.surname = surname;
     }
 
-    public String getFather_name() {
-        return father_name;
+
+    public String getFather() {
+        return father;
     }
 
-    public void setFather_name(String father_name) {
-        this.father_name = father_name;
+    public void setFather(String father) {
+        this.father = father;
     }
 
     public String getEmail() {
@@ -72,7 +73,7 @@ public class Teacher {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
-                ", father_name='" + father_name + '\'' +
+                ", father_name='" + father + '\'' +
                 ", email='" + email + '\'' +
                 ", chair_id=" + chair_id +
                 '}';
