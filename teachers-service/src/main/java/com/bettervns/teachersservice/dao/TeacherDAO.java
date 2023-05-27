@@ -1,6 +1,5 @@
 package com.bettervns.teachersservice.dao;
 
-
 import com.bettervns.teachersservice.models.Teacher;
 import com.bettervns.teachersservice.repository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +20,9 @@ public class TeacherDAO {
         this.teacherRepository = teacherRepository;
     }
 
-//    public List<Teacher> index() {
-//        return teachersJdbcTemplate.query("SELECT * FROM teacher", new com.bettervns.teacherservice.dao.TeacherMapper());
-//    }
-
     public List<Teacher> getAllTeachers() {
         return teacherRepository.findAll();
     }
-
 
     public Teacher getTeacherById(int id) {
         Optional<Teacher> teacher = teacherRepository.findById(id);
@@ -39,31 +33,9 @@ public class TeacherDAO {
         }
     }
 
-//    public Teacher show(int id) {
-//        return teachersJdbcTemplate.query("SELECT * FROM teacher WHERE id=?", new Object[]{id},
-//                new com.bettervns.teacherservice.dao.TeacherMapper()).stream().findAny().orElse(null);
-//    }
-
-    public Teacher addTeacher(Teacher teacher) {
+    public Teacher add(Teacher teacher) {
         return teacherRepository.save(teacher);
     }
-
-
-//    public void update(int id, Teacher teacher) {
-//        teachersJdbcTemplate.update("UPDATE teacher SET teacher_name=?,surname=?,father_name=?, email=?, chair_id=? WHERE id=?",
-//                teacher.getName(), teacher.getSurname(), teacher.getFather_name(), teacher.getEmail(), teacher.getChair_id(), id);
-//    }
-
-//    public void update(int id, Teacher updatedTeacher) {
-//        teacherRepository.findById(id).ifPresent(teacher -> {
-//            teacher.setName(updatedTeacher.getName());
-//            teacher.setSurname(updatedTeacher.getSurname());
-//            teacher.setFather_name(updatedTeacher.getFather_name());
-//            teacher.setEmail(updatedTeacher.getEmail());
-//            teacher.setChair_id(updatedTeacher.getChair_id());
-//            teacherRepository.save(teacher);
-//        });
-//    }
 
     public void update(int id, Teacher updatedTeacher) {
         Optional<Teacher> optionalTeacher = teacherRepository.findById(id);
@@ -73,19 +45,14 @@ public class TeacherDAO {
             teacher.setSurname(updatedTeacher.getSurname());
             teacher.setFather(updatedTeacher.getFather());
             teacher.setEmail(updatedTeacher.getEmail());
-            teacher.setChair_id(updatedTeacher.getChair_id());
+            teacher.setDepartmentId(updatedTeacher.getDepartmentId());
             teacherRepository.save(teacher);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
         }
     }
 
-
-//    public void delete(int id) {
-//        teachersJdbcTemplate.update("DELETE FROM teacher WHERE id = ?", id);
-//    }
-
-    public void deleteTeacher(int id) {
+    public void delete(int id) {
         teacherRepository.deleteById(id);
     }
 }

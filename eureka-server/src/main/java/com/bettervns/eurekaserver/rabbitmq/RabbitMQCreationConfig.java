@@ -18,8 +18,8 @@ public class RabbitMQCreationConfig {
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory factory = new CachingConnectionFactory(RABBIT_HOST_NAME);
-        factory.setUsername("admin");
-        factory.setPassword("grisha_sobaka1");
+        factory.setUsername("bettervns");
+        factory.setPassword("bettervns");
         return factory;
     }
 

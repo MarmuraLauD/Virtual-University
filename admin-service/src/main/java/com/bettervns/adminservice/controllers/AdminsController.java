@@ -1,7 +1,6 @@
 package com.bettervns.adminservice.controllers;
 
 import com.bettervns.adminservice.dao.AdminDAO;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +17,8 @@ public class AdminsController {
     }
 
     @GetMapping("/admin/{id}")
-    public String homePage(@PathVariable("id") int id, Model model) {
-        model.addAttribute("admin", adminDao.show(id));
+    public String homePage(@PathVariable("id") int id) {
+        //return "111";
         return adminDao.show(id).toString();
     }
 }

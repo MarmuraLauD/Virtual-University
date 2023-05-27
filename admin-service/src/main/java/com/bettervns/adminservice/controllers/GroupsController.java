@@ -1,6 +1,6 @@
 package com.bettervns.adminservice.controllers;
 
-import com.bettervns.adminservice.requests.NewGroupRequest;
+import com.bettervns.adminservice.requests.GroupRequest;
 import com.google.gson.GsonBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class GroupsController {
     }
 
     @PostMapping()
-    public String createGroup(@RequestBody NewGroupRequest requestObject){
+    public String createGroup(@RequestBody GroupRequest requestObject){
         System.out.println(requestObject);
         String message = "create " + "group " + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         System.out.println(message);
@@ -30,7 +30,7 @@ public class GroupsController {
     }
 
     @PatchMapping("/{id}")
-    public String updateGroup(@RequestBody NewGroupRequest requestObject, @PathVariable("id") int id){
+    public String updateGroup(@RequestBody GroupRequest requestObject, @PathVariable("id") int id){
         String message = "update " + "group " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(STUDYING_QUEUE_KEY, message);

@@ -20,7 +20,7 @@ public class GatewayConfig {
                 .route("studyingservice", r -> r.path("/studying", "/studying/**")
                         .filters(f -> f.filter(new JwtValidationFilter("")))
                         .uri("lb://studyingservice"))
-                .route("bettervnssecurity", r -> r.path( "/api/auth/**")
+                .route("bettervnssecurity", r -> r.path("/api/auth/**")
                         .filters(f -> f
                                 .filter(new JwtValidationFilter("ROLE_ANYONE")))
                         .uri("lb://bettervnssecurity"))
