@@ -21,7 +21,8 @@ public class TeachersController {
 
     @PostMapping()
     public String createTeacher(@RequestBody TeacherRequest requestObject){
-        String message = "create " + "teacher " + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
+        String message = "create " + 0 + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
+        System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(TEACHERS_QUEUE_KEY, message);
         return "redirect:/admin/1";
@@ -29,7 +30,8 @@ public class TeachersController {
 
     @PatchMapping("/{id}")
     public String updateTeacher(@RequestBody TeacherRequest requestObject, @PathVariable("id") int id){
-        String message = "update " + "teacher " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
+        String message = "update " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
+        System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(TEACHERS_QUEUE_KEY, message);
         return "redirect:/admin/1";
@@ -37,7 +39,7 @@ public class TeachersController {
 
     @DeleteMapping ("/{id}")
     public String deleteTeacher(@PathVariable("id") int id){
-        String message = new String("delete " + "teacher " + id);
+        String message = new String("delete " + id);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(TEACHERS_QUEUE_KEY, message);
         return "redirect:/admin/1";
