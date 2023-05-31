@@ -10,7 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("")
+
+@RequestMapping()
 public class TeachersController {
 
     private final TeacherDAO teacherDAO;
@@ -25,8 +26,10 @@ public class TeachersController {
         return ResponseEntity.ok(new Gson().toJson(teacherDAO.getAllTeachers()));
     }
 
-    @GetMapping("/teacher/id")
-    public ResponseEntity<?> getTeacherById(@PathVariable("id") int id){
-        return new ResponseEntity<Teacher>(teacherDAO.getTeacherById(id), HttpStatus.OK);
+    @GetMapping("/teacher/{id}")
+    public ResponseEntity<?> getTeacherById(@PathVariable("id") int id) {
+        System.out.println(teacherDAO.getTeacherById(id));
+        return ResponseEntity.ok(new Gson().toJson(teacherDAO.getTeacherById(id)));
     }
+
 }
