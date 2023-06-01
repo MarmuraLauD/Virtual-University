@@ -105,29 +105,14 @@ public class AuthRestController {
             HttpHeaders headers = new HttpHeaders();
             headers.add(HttpHeaders.SET_COOKIE, jwtCookie.toString());
             headers.add(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString());
-            return new ResponseEntity<>(headers, HttpStatus.OK);
+            String responseBody = jwtUtils.getRoleFromJwtToken(userPrincipal);
+            return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
         } catch (AuthenticationException e) {
             HttpHeaders headers = new HttpHeaders();
             return new ResponseEntity<>(headers, HttpStatus.UNAUTHORIZED);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @GetMapping("/signin")
-    public ResponseEntity<?> sendLoginUserResponse(@CurrentSecurityContext SecurityContext context) {
-        Object principal = context.getAuthentication().getPrincipal();
-        if (Objects.equals(principal.toString(), "anonymousUser")) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-    }
-
-    @GetMapping("/signout")
-    public ResponseEntity<?> sendLogoutUserResponse(@CurrentSecurityContext SecurityContext context) {
-        Object principal = context.getAuthentication().getPrincipal();
-        if (!Objects.equals(principal.toString(), "anonymousUser")) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/signout")
