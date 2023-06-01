@@ -1,7 +1,10 @@
 package com.bettervns.studyingservice.dao;
 
+import com.bettervns.studyingservice.models.Appointment;
 import com.bettervns.studyingservice.models.AppointmentToGroup;
 import com.bettervns.studyingservice.repository.AppointmentToGroupRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -14,10 +17,12 @@ import java.util.Optional;
 public class AppointmentToGroupDAO {
 
     private final AppointmentToGroupRepository AppointmentToGroupRepository;
+    private final EntityManager entityManager;
 
     @Autowired
-    public AppointmentToGroupDAO(AppointmentToGroupRepository appointmentToGroupRepository) {
+    public AppointmentToGroupDAO(AppointmentToGroupRepository appointmentToGroupRepository, EntityManager entityManager) {
         this.AppointmentToGroupRepository = appointmentToGroupRepository;
+        this.entityManager = entityManager;
     }
 
     public List<AppointmentToGroup> getAllAppointmentToGroups() {
@@ -31,6 +36,15 @@ public class AppointmentToGroupDAO {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
         }
+    }
+
+    public List<AppointmentToGroup> getAppointmentsToGroupsByGroupId(int groupId){
+        TypedQuery<AppointmentToGroup> query = entityManager.createQuery(
+                "SELECT a FROM AppointmentToGroup a WHERE a.groupId = :groupId", AppointmentToGroup.class);
+        query.setParameter("groupId", groupId);
+        List<AppointmentToGroup> resultList = query.getResultList();
+        System.out.println(resultList);
+        return resultList;
     }
 
     public AppointmentToGroup add(AppointmentToGroup appointmentToGroup) {
