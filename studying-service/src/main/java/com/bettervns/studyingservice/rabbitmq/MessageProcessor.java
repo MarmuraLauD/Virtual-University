@@ -43,7 +43,7 @@ public class MessageProcessor {
     public void performDepartmentAction(String message) {
         switch (messageParser.getOperationType(message)) {
             case "create" -> {
-                departmentDAO.addDepartment(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
+                departmentDAO.add(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
                         fromJson(messageParser.getMessageBody(message), Department.class));
             }
             case "update" -> {
@@ -57,7 +57,7 @@ public class MessageProcessor {
     public void performGroupAction(String message) {
         switch (messageParser.getOperationType(message)) {
             case "create" -> {
-                groupDAO.addGroup(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
+                groupDAO.add(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
                         fromJson(messageParser.getMessageBody(message), Group.class));
             }
             case "update" -> {
@@ -71,7 +71,7 @@ public class MessageProcessor {
     public void performCourseAction(String message) {
         switch (messageParser.getOperationType(message)) {
             case "create" -> {
-                courseDAO.addCourse(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
+                courseDAO.add(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
                         fromJson(messageParser.getMessageBody(message), Course.class));
             }
             case "update" -> {
@@ -85,7 +85,7 @@ public class MessageProcessor {
     public void performAppointmentAction(String message) {
         switch (messageParser.getOperationType(message)) {
             case "create" -> {
-                appointmentDAO.addAppointment(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
+                appointmentDAO.add(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
                         fromJson(messageParser.getMessageBody(message), Appointment.class));
             }
             case "update" -> {
@@ -95,5 +95,4 @@ public class MessageProcessor {
             case "delete" -> appointmentDAO.delete(messageParser.getId(message));
         }
     }
-
 }

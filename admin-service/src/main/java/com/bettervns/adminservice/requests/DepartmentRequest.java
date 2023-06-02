@@ -1,6 +1,6 @@
 package com.bettervns.adminservice.requests;
 
-public record NewDepartmentRequest(
+public record DepartmentRequest(
         String name,
         String phone,
         String email
