@@ -187,6 +187,10 @@ public class JwtUtils {
                 .getSubject();
     }
 
+    public String getRoleFromJwtToken(UserDetailsImpl userPrincipal) {
+        return userPrincipal.getAuthorities().toString();
+    }
+
     private ResponseCookie generateCookie(String name, String value, Long maxAge) {
         return ResponseCookie.from(name, value).path("/api/auth/refreshtoken").maxAge(maxAge).httpOnly(true).build();
     }
