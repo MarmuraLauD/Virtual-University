@@ -41,26 +41,29 @@ public class AppointmentsController {
     @GetMapping("/appointments/week")
     public ResponseEntity<?> showAppointmentsForGroupByDate(@RequestParam int groupId){
         List<Integer> appointmentsIds = new ArrayList<>();
-        List<Appointment> appointments = new ArrayList<>();
         List<AppointmentToGroup> appointmentToGroups = appointmentToGroupDAO.getAppointmentsToGroupsByGroupId(groupId);
         for (AppointmentToGroup i : appointmentToGroups){
             if (!appointmentsIds.contains(i.getAppointmentId())) appointmentsIds.add(i.getAppointmentId());
         }
-
-        LocalDate currentDate = LocalDate.now();
-        Date mondayDate = Date.valueOf(currentDate);
-        Date sundayDate = Date.valueOf(currentDate);
-        for (int i = 0; i < currentDate.getDayOfWeek().getValue() - 1; i++){
+        LocalDate nowDate = LocalDate.now();
+        Date mondayDate = Date.valueOf(nowDate);
+        Date sundayDate = Date.valueOf(nowDate);
+        nowDate = null;
+        for (int i = 0; i < nowDate.getDayOfWeek().getValue() - 1; i++){
             mondayDate.setDate(mondayDate.getDate() - 1);
         }
-        for (int i = 0; i < 7 - currentDate.getDayOfWeek().getValue(); i++){
-            sundayDate.setDate(sundayDate.getDate() + 1);
+        List<List<Appointment>> weeklist = new ArrayList<>();
+        Date currentDate = mondayDate;
+        for (int i = 0; i < 7; i++) {
+            weeklist.add(new ArrayList<Appointment>());
+            currentDate.setDate(currentDate.getDate() + 1);
+            for (Integer j : appointmentsIds) {
+                if (appointmentDAO.getAppointmentById(j).getDate().compareTo(currentDate) == 0) {
+                    weeklist.get(i).add(appointmentDAO.getAppointmentById(j));
+                }
+            }
         }
-        for (Integer i : appointmentsIds){
-           if (appointmentDAO.getAppointmentById(i).getDate().compareTo(mondayDate) >= 0 &&
-                   appointmentDAO.getAppointmentById(i).getDate().compareTo(sundayDate) <= 0)
-                   appointments.add(appointmentDAO.getAppointmentById(i));
-        }
-        return ResponseEntity.ok(new Gson().toJson(appointments));
+
+        return ResponseEntity.ok(new Gson().toJson(weeklist));
     }
 }

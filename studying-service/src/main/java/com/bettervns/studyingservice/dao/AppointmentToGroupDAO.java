@@ -43,7 +43,6 @@ public class AppointmentToGroupDAO {
                 "SELECT a FROM AppointmentToGroup a WHERE a.groupId = :groupId", AppointmentToGroup.class);
         query.setParameter("groupId", groupId);
         List<AppointmentToGroup> resultList = query.getResultList();
-        System.out.println(resultList);
         return resultList;
     }
 
