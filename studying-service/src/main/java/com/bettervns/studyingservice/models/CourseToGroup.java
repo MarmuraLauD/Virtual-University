@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,25 +22,11 @@ public class CourseToGroup {
     @Column(name = "group_id", nullable = false)
     private int groupId;
 
+    @OneToMany(mappedBy = "courseToGroup", cascade = CascadeType.ALL)
+    private List<CourseAttachedFile> courseAttachedFiles;
 
     public CourseToGroup(int courseId, int groupId) {
         this.courseId = courseId;
-        this.groupId = groupId;
-    }
-
-    public int getCourseId() {
-        return courseId;
-    }
-
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
-
-    public int getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(int groupId) {
         this.groupId = groupId;
     }
 
@@ -48,6 +36,7 @@ public class CourseToGroup {
                 "id=" + id +
                 ", courseId=" + courseId +
                 ", groupId=" + groupId +
+                ", courseAttachedFiles=" + courseAttachedFiles +
                 '}';
     }
 }
