@@ -20,8 +20,8 @@ public class AdminServiceApplication {
         DriverManagerDataSource datasource = new DriverManagerDataSource();
         datasource.setDriverClassName("com.mysql.jdbc.Driver");
         datasource.setUrl("jdbc:mysql://localhost:3306/admins?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true");
-        datasource.setUsername("bettervns");
-        datasource.setPassword("grisha_sobaka1");
+        datasource.setUsername("root");
+        datasource.setPassword("Vladmarmura2002");
         return datasource;
     }
 
