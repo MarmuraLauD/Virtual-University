@@ -3,7 +3,7 @@ package com.bettervns.studyingservice.rabbitmq;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MessageParser {
+public class EntityMessageParser {
 
     public String getOperationType(String message) {
         StringBuilder operationType = new StringBuilder();

@@ -1,9 +1,11 @@
 package com.bettervns.adminservice.controllers;
 
 import com.bettervns.adminservice.requests.CourseRequest;
+import com.bettervns.adminservice.requests.CourseToGroupRequest;
 import com.google.gson.GsonBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public class CoursesController {
 
     private static final String DIRECT_EXCHANGE_NAME = "betterVNS-direct-exchange";
-    private static final String STUDYING_QUEUE_KEY = "studyingQueue";
+    private static final String STUDYING_ENTITY_QUEUE_KEY = "studyingEntityQueue";
     private final RabbitTemplate template;
 
     @Autowired
@@ -24,7 +26,7 @@ public class CoursesController {
         String message = "create " + "course " + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
-        template.convertAndSend(STUDYING_QUEUE_KEY, message);
+        template.convertAndSend(STUDYING_ENTITY_QUEUE_KEY, message);
         return "redirect:/admin/1";
     }
 
@@ -33,7 +35,7 @@ public class CoursesController {
         String message = "update " + "course " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
-        template.convertAndSend(STUDYING_QUEUE_KEY, message);
+        template.convertAndSend(STUDYING_ENTITY_QUEUE_KEY, message);
         return "redirect:/admin/1";
     }
 
@@ -41,10 +43,17 @@ public class CoursesController {
     public String deleteCourse(@PathVariable("id") int id){
         String message = new String("delete " + "course " + id);
         template.setExchange(DIRECT_EXCHANGE_NAME);
-        template.convertAndSend(STUDYING_QUEUE_KEY, message);
+        template.convertAndSend(STUDYING_ENTITY_QUEUE_KEY, message);
         return "redirect:/admin/1";
     }
 
-
-
+    @PostMapping("/attach")
+    public ResponseEntity<?> attachGroupToCourse(@RequestBody CourseToGroupRequest courseToGroupRequest){
+        String message = new String("attach " + "course_group " +
+                new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(courseToGroupRequest));
+        System.out.println(message);
+        template.setExchange(DIRECT_EXCHANGE_NAME);
+        template.convertAndSend(STUDYING_ENTITY_QUEUE_KEY, message);
+        return ResponseEntity.ok("Successfully attached");
+    }
 }

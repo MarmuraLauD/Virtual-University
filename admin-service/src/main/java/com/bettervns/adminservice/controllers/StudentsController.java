@@ -45,4 +45,6 @@ public class StudentsController {
         template.convertAndSend(STUDENTS_QUEUE_KEY, message);
         return "redirect:/admin/1";
     }
+
+
 }

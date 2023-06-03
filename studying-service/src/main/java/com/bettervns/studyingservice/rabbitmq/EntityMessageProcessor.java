@@ -13,26 +13,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MessageProcessor {
+public class EntityMessageProcessor {
     private final DepartmentDAO departmentDAO;
     private final CourseDAO courseDAO;
     private final GroupDAO groupDAO;
     private final AppointmentDAO appointmentDAO;
-    private final MessageParser messageParser;
+    private final EntityMessageParser entityMessageParser;
 
     @Autowired
-    public MessageProcessor(GroupDAO groupDAO, DepartmentDAO departmentDAO, MessageParser messageParser,
-                            CourseDAO courseDAO, AppointmentDAO appointmentDAO) {
+    public EntityMessageProcessor(GroupDAO groupDAO, DepartmentDAO departmentDAO, EntityMessageParser entityMessageParser,
+                                  CourseDAO courseDAO, AppointmentDAO appointmentDAO) {
         this.departmentDAO = departmentDAO;
         this.groupDAO = groupDAO;
-        this.messageParser = messageParser;
+        this.entityMessageParser = entityMessageParser;
         this.courseDAO = courseDAO;
         this.appointmentDAO = appointmentDAO;
     }
 
     public void processMessage(String message) {
         System.out.println("Processor got: " + message);
-        switch (messageParser.getModelType(message)) {
+        switch (entityMessageParser.getModelType(message)) {
             case "department" -> performDepartmentAction(message);
             case "course" -> performCourseAction(message);
             case "group" -> performGroupAction(message);
@@ -41,58 +41,58 @@ public class MessageProcessor {
     }
 
     public void performDepartmentAction(String message) {
-        switch (messageParser.getOperationType(message)) {
+        switch (entityMessageParser.getOperationType(message)) {
             case "create" -> {
                 departmentDAO.add(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
-                        fromJson(messageParser.getMessageBody(message), Department.class));
+                        fromJson(entityMessageParser.getMessageBody(message), Department.class));
             }
             case "update" -> {
-                departmentDAO.update(messageParser.getId(message), new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
-                        fromJson(messageParser.getMessageBody(message), Department.class));
+                departmentDAO.update(entityMessageParser.getId(message), new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
+                        fromJson(entityMessageParser.getMessageBody(message), Department.class));
             }
-            case "delete" -> departmentDAO.delete(messageParser.getId(message));
+            case "delete" -> departmentDAO.delete(entityMessageParser.getId(message));
         }
     }
 
     public void performGroupAction(String message) {
-        switch (messageParser.getOperationType(message)) {
+        switch (entityMessageParser.getOperationType(message)) {
             case "create" -> {
                 groupDAO.add(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
-                        fromJson(messageParser.getMessageBody(message), Group.class));
+                        fromJson(entityMessageParser.getMessageBody(message), Group.class));
             }
             case "update" -> {
-                groupDAO.update(messageParser.getId(message), new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
-                        fromJson(messageParser.getMessageBody(message), Group.class));
+                groupDAO.update(entityMessageParser.getId(message), new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
+                        fromJson(entityMessageParser.getMessageBody(message), Group.class));
             }
-            case "delete" -> groupDAO.delete(messageParser.getId(message));
+            case "delete" -> groupDAO.delete(entityMessageParser.getId(message));
         }
     }
 
     public void performCourseAction(String message) {
-        switch (messageParser.getOperationType(message)) {
+        switch (entityMessageParser.getOperationType(message)) {
             case "create" -> {
                 courseDAO.add(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
-                        fromJson(messageParser.getMessageBody(message), Course.class));
+                        fromJson(entityMessageParser.getMessageBody(message), Course.class));
             }
             case "update" -> {
-                courseDAO.update(messageParser.getId(message), new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
-                        fromJson(messageParser.getMessageBody(message), Course.class));
+                courseDAO.update(entityMessageParser.getId(message), new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
+                        fromJson(entityMessageParser.getMessageBody(message), Course.class));
             }
-            case "delete" -> courseDAO.delete(messageParser.getId(message));
+            case "delete" -> courseDAO.delete(entityMessageParser.getId(message));
         }
     }
 
     public void performAppointmentAction(String message) {
-        switch (messageParser.getOperationType(message)) {
+        switch (entityMessageParser.getOperationType(message)) {
             case "create" -> {
                 appointmentDAO.add(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
-                        fromJson(messageParser.getMessageBody(message), Appointment.class));
+                        fromJson(entityMessageParser.getMessageBody(message), Appointment.class));
             }
             case "update" -> {
-                appointmentDAO.update(messageParser.getId(message), new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
-                        fromJson(messageParser.getMessageBody(message), Appointment.class));
+                appointmentDAO.update(entityMessageParser.getId(message), new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
+                        fromJson(entityMessageParser.getMessageBody(message), Appointment.class));
             }
-            case "delete" -> appointmentDAO.delete(messageParser.getId(message));
+            case "delete" -> appointmentDAO.delete(entityMessageParser.getId(message));
         }
     }
 }
