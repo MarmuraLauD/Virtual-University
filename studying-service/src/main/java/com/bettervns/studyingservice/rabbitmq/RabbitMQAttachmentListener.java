@@ -10,23 +10,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQAttachmentListener {
     public static final String STUDYING_ATTACHMENT_QUEUE_NAME = "studyingAttachmentQueue";
-    EntityMessageProcessor processor;
+    AttachmentMessageProcessor processor;
 
     @Autowired
-    public RabbitMQAttachmentListener(EntityMessageProcessor processor) {
+    public RabbitMQAttachmentListener(AttachmentMessageProcessor processor) {
         this.processor = processor;
     }
 
     @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory factory = new CachingConnectionFactory("localhost");
-        factory.setUsername("bettervns");
-        factory.setPassword("bettervns");
-        return factory;
-    }
-
-    @Bean
-    public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory){
+    public SimpleMessageListenerContainer attachmentListenerContainer(ConnectionFactory connectionFactory){
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames(STUDYING_ATTACHMENT_QUEUE_NAME);

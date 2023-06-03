@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
@@ -47,8 +48,6 @@ public class AppointmentsController {
         }
         LocalDate nowDate = LocalDate.now();
         Date mondayDate = Date.valueOf(nowDate);
-        Date sundayDate = Date.valueOf(nowDate);
-        nowDate = null;
         for (int i = 0; i < nowDate.getDayOfWeek().getValue() - 1; i++){
             mondayDate.setDate(mondayDate.getDate() - 1);
         }

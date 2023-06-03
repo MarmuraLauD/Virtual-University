@@ -14,6 +14,7 @@ public class CoursesController {
 
     private static final String DIRECT_EXCHANGE_NAME = "betterVNS-direct-exchange";
     private static final String STUDYING_ENTITY_QUEUE_KEY = "studyingEntityQueue";
+    private static final String STUDYING_ATTACHMENT_QUEUE_KEY = "studyingAttachmentQueue";
     private final RabbitTemplate template;
 
     @Autowired
@@ -53,7 +54,7 @@ public class CoursesController {
                 new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(courseToGroupRequest));
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
-        template.convertAndSend(STUDYING_ENTITY_QUEUE_KEY, message);
+        template.convertAndSend(STUDYING_ATTACHMENT_QUEUE_KEY, message);
         return ResponseEntity.ok("Successfully attached");
     }
 }
