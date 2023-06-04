@@ -46,6 +46,22 @@ public class AppointmentToGroupDAO {
         return resultList;
     }
 
+    public List<AppointmentToGroup> getAppointmentsToGroupsByAppointmentId(int appointmentId){
+        TypedQuery<AppointmentToGroup> query = entityManager.createQuery(
+                "SELECT a FROM AppointmentToGroup a WHERE a.appointmentId = :appointmentId", AppointmentToGroup.class);
+        query.setParameter("appointmentId", appointmentId);
+        List<AppointmentToGroup> resultList = query.getResultList();
+        return resultList;
+    }
+
+    public void removeAppointmentToGroup(int groupId, int appointmentId){
+        TypedQuery<AppointmentToGroup> query = entityManager.createQuery(
+                "DELETE FROM AppointmentToGroup a WHERE a.appointmentId = :appointmentId AND a.groupId = :groupId", AppointmentToGroup.class);
+        query.setParameter("groupId", groupId);
+        query.setParameter("appointmentId", appointmentId);
+        query.executeUpdate();
+    }
+
     public AppointmentToGroup add(AppointmentToGroup appointmentToGroup) {
         return AppointmentToGroupRepository.save(appointmentToGroup);
     }

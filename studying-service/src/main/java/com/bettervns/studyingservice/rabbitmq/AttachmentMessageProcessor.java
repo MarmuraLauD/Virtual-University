@@ -22,7 +22,6 @@ public class AttachmentMessageProcessor {
 
     public void processMessage(String message) {
         System.out.println("Processor got: " + message);
-        System.out.println(attachmentMessageParser.getModelType(message));
         switch (attachmentMessageParser.getModelType(message)) {
             case "course_group" -> performCourseAction(message);
             case "appointment_group" -> performAppointmentAction(message);
@@ -30,14 +29,20 @@ public class AttachmentMessageProcessor {
     }
 
     public void performCourseAction(String message) {
-        System.out.println(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
-                fromJson(attachmentMessageParser.getMessageBody(message), CourseToGroup.class));
         courseToGroupDAO.add(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
                 fromJson(attachmentMessageParser.getMessageBody(message), CourseToGroup.class));
     }
 
     public void performAppointmentAction(String message) {
-        appointmentToGroupDAO.add(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
-                fromJson(attachmentMessageParser.getMessageBody(message), AppointmentToGroup.class));
+        switch (attachmentMessageParser.getOperationType(message)) {
+            case "attach" -> appointmentToGroupDAO.add(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().
+                    fromJson(attachmentMessageParser.getMessageBody(message), AppointmentToGroup.class));
+            case "remove" -> appointmentToGroupDAO.removeAppointmentToGroup(
+                    new GsonBuilder().setDateFormat("yyyy-MM-dd").create().fromJson
+                            (attachmentMessageParser.getMessageBody(message), AppointmentToGroup.class).getGroupId(),
+                    new GsonBuilder().setDateFormat("yyyy-MM-dd").create().fromJson
+                            (attachmentMessageParser.getMessageBody(message), AppointmentToGroup.class).getAppointmentId()
+            );
+        }
     }
 }

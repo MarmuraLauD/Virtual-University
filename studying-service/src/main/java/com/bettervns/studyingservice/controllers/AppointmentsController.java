@@ -38,6 +38,11 @@ public class AppointmentsController {
         return ResponseEntity.ok(new Gson().toJson(appointmentDAO.getAppointmentById(id)));
     }
 
+    @GetMapping("/appointment/{id}/groups")
+    public ResponseEntity<?> getGroupsOfAppointment(@PathVariable("id") int id) {
+        return ResponseEntity.ok(new Gson().toJson(appointmentToGroupDAO.getAppointmentsToGroupsByAppointmentId(id)));
+    }
+
     // TODO : TRY java.util.Date here, and MB replace import to java.sql.Date
     @GetMapping("/appointments/week")
     public ResponseEntity<?> showAppointmentsForGroupByDate(@RequestParam int groupId){

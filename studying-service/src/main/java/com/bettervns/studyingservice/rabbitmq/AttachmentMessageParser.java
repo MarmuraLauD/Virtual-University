@@ -15,6 +15,18 @@ public class AttachmentMessageParser {
         return modelType.toString();
     }
 
+    public String getOperationType(String message) {
+        StringBuilder operationType = new StringBuilder();
+        for (int i = 0; i < message.length(); i++) {
+            if (message.charAt(i) == ' ') {
+                break;
+            } else {
+                operationType.append(message.charAt(i));
+            }
+        }
+        return operationType.toString();
+    }
+
     public String getMessageBody(String message) {
         StringBuilder messageBody = new StringBuilder();
         for (int i = getSpaceIndexByNumber(message, 2);

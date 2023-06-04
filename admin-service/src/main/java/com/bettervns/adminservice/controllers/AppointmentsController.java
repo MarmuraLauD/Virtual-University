@@ -58,4 +58,13 @@ public class AppointmentsController {
         return ResponseEntity.ok("Successfully attached");
     }
 
+    @PostMapping("/remove")
+    public ResponseEntity<?> removeGroupToAppointment(@RequestBody AppointmentToGroupRequest appointmentToGroupRequest){
+        String message = new String("remove " + "appointment_group " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(appointmentToGroupRequest));
+        System.out.println(message);
+        template.setExchange(DIRECT_EXCHANGE_NAME);
+        template.convertAndSend(STUDYING_ATTACHMENT_QUEUE_KEY, message);
+        return ResponseEntity.ok("Successfully removed");
+    }
+
 }
