@@ -16,14 +16,13 @@ public class CourseAttachedFile {
     private int name;
     @Column(name = "file_link", nullable = false)
     private String fileLink;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_group_id")
-    private CourseToGroup courseToGroup;
+    @Column
+    private int courseToGroupId;
 
-    public CourseAttachedFile(int name, String fileLink, CourseToGroup courseToGroup) {
+    public CourseAttachedFile(int name, String fileLink, int courseToGroupId) {
         this.name = name;
         this.fileLink = fileLink;
-        this.courseToGroup = courseToGroup;
+        this.courseToGroupId = courseToGroupId;
     }
 
     @Override
@@ -32,7 +31,7 @@ public class CourseAttachedFile {
                 "id=" + id +
                 ", name=" + name +
                 ", fileLink='" + fileLink + '\'' +
-                ", courseToGroup id=" + courseToGroup.getId() +
+                ", courseToGroup id=" + courseToGroupId +
                 '}';
     }
 }

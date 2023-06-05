@@ -11,7 +11,8 @@ public class RabbitMQCreationConfig {
 
     private static final String STUDENTS_QUEUE_NAME = "studentsQueue";
     private static final String TEACHERS_QUEUE_NAME = "teachersQueue";
-    private static final String STUDYING_QUEUE_NAME = "studyingQueue";
+    private static final String STUDYING_ENTITY_QUEUE_NAME = "studyingEntityQueue";
+    private static final String STUDYING_ATTACHMENT_QUEUE_NAME = "studyingAttachmentQueue";
     private static final String DIRECT_EXCHANGE_NAME = "betterVNS-direct-exchange";
     private static final String RABBIT_HOST_NAME = "localhost";
 
@@ -39,8 +40,13 @@ public class RabbitMQCreationConfig {
     }
 
     @Bean
-    Queue studyingQueue() {
-        return new Queue(STUDYING_QUEUE_NAME, false);
+    Queue studyingEntityQueue() {
+        return new Queue(STUDYING_ENTITY_QUEUE_NAME, false);
+    }
+
+    @Bean
+    Queue studyingAttachmentQueue() {
+        return new Queue(STUDYING_ATTACHMENT_QUEUE_NAME, false);
     }
 
     @Bean
@@ -54,7 +60,12 @@ public class RabbitMQCreationConfig {
     }
 
     @Bean
-    Binding studyingQueueBinding(Queue studyingQueue, DirectExchange directExchange) {
-        return BindingBuilder.bind(studyingQueue).to(directExchange).with(STUDYING_QUEUE_NAME);
+    Binding studyingQueueBinding(Queue studyingEntityQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(studyingEntityQueue).to(directExchange).with(STUDYING_ENTITY_QUEUE_NAME);
+    }
+
+    @Bean
+    Binding studyingAttachmentBinding(Queue studyingAttachmentQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(studyingAttachmentQueue).to(directExchange).with(STUDYING_ATTACHMENT_QUEUE_NAME);
     }
 }

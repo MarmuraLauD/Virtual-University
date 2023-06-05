@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
@@ -37,6 +38,11 @@ public class AppointmentsController {
         return ResponseEntity.ok(new Gson().toJson(appointmentDAO.getAppointmentById(id)));
     }
 
+    @GetMapping("/appointment/{id}/groups")
+    public ResponseEntity<?> getGroupsOfAppointment(@PathVariable("id") int id) {
+        return ResponseEntity.ok(new Gson().toJson(appointmentToGroupDAO.getAppointmentsToGroupsByAppointmentId(id)));
+    }
+
     // TODO : TRY java.util.Date here, and MB replace import to java.sql.Date
     @GetMapping("/appointments/week")
     public ResponseEntity<?> showAppointmentsForGroupByDate(@RequestParam int groupId){
@@ -47,8 +53,6 @@ public class AppointmentsController {
         }
         LocalDate nowDate = LocalDate.now();
         Date mondayDate = Date.valueOf(nowDate);
-        Date sundayDate = Date.valueOf(nowDate);
-        nowDate = null;
         for (int i = 0; i < nowDate.getDayOfWeek().getValue() - 1; i++){
             mondayDate.setDate(mondayDate.getDate() - 1);
         }

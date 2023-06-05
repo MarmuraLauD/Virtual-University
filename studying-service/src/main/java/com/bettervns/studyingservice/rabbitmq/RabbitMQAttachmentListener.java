@@ -8,28 +8,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabbitMQListener {
-    public static final String STUDYING_QUEUE_NAME = "studyingQueue";
-    MessageProcessor processor;
+public class RabbitMQAttachmentListener {
+    public static final String STUDYING_ATTACHMENT_QUEUE_NAME = "studyingAttachmentQueue";
+    AttachmentMessageProcessor processor;
 
     @Autowired
-    public RabbitMQListener(MessageProcessor processor) {
+    public RabbitMQAttachmentListener(AttachmentMessageProcessor processor) {
         this.processor = processor;
     }
 
     @Bean
-    public ConnectionFactory connectionFactory() {
-        CachingConnectionFactory factory = new CachingConnectionFactory("localhost");
-        factory.setUsername("bettervns");
-        factory.setPassword("bettervns");
-        return factory;
-    }
-
-    @Bean
-    public SimpleMessageListenerContainer messageListenerContainer(ConnectionFactory connectionFactory){
+    public SimpleMessageListenerContainer attachmentListenerContainer(ConnectionFactory connectionFactory){
         SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.setQueueNames(STUDYING_QUEUE_NAME);
+        container.setQueueNames(STUDYING_ATTACHMENT_QUEUE_NAME);
         container.setMessageListener(message -> {
             processor.processMessage(new String(message.getBody()));
         });

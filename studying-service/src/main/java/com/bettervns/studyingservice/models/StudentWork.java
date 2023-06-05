@@ -20,17 +20,15 @@ public class StudentWork {
     private int mark;
     @Column(name = "file_link", nullable = false)
     private String fileLink;
+    @Column
+    private int studentToCourseGroupId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_course_group_id")
-    private StudentToCourseGroup studentToCourseGroup;
-
-    public StudentWork(int studentId, int name, int mark, String fileLink, StudentToCourseGroup studentToCourseGroup) {
+    public StudentWork(int studentId, int name, int mark, String fileLink, int studentToCourseGroupId) {
         this.studentId = studentId;
         this.name = name;
         this.mark = mark;
         this.fileLink = fileLink;
-        this.studentToCourseGroup = studentToCourseGroup;
+        this.studentToCourseGroupId = studentToCourseGroupId;
     }
 
     @Override
@@ -41,7 +39,7 @@ public class StudentWork {
                 ", name=" + name +
                 ", mark=" + mark +
                 ", fileLink='" + fileLink + '\'' +
-                ", studentToCourseGroup id=" + studentToCourseGroup.getId() +
+                ", studentToCourseGroup id=" + studentToCourseGroupId +
                 '}';
     }
 }

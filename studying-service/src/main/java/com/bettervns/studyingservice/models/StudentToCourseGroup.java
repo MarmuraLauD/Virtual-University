@@ -20,13 +20,9 @@ public class StudentToCourseGroup {
     @Column(name = "course_group_id", nullable = false)
     private int courseGroupId;
 
-    @OneToMany(mappedBy = "studentToCourseGroup", cascade = CascadeType.ALL)
-    private List<StudentWork> studentWorks;
-
     public StudentToCourseGroup(int studentId, int courseGroupId, List<StudentWork> studentWorks) {
         this.studentId = studentId;
         this.courseGroupId = courseGroupId;
-        this.studentWorks = studentWorks;
     }
 
     @Override
@@ -35,7 +31,6 @@ public class StudentToCourseGroup {
                 "id=" + id +
                 ", studentId=" + studentId +
                 ", studentCourseGroupId=" + courseGroupId +
-                ", studentWorks=" + studentWorks +
                 '}';
     }
 }

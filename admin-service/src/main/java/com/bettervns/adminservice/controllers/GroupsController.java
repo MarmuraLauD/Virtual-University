@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class GroupsController {
 
     private static final String DIRECT_EXCHANGE_NAME = "betterVNS-direct-exchange";
-    private static final String STUDYING_QUEUE_KEY = "studyingQueue";
+    private static final String STUDYING_ENTITY_QUEUE_KEY = "studyingEntityQueue";
     private final RabbitTemplate template;
 
     @Autowired
@@ -21,11 +21,9 @@ public class GroupsController {
 
     @PostMapping()
     public String createGroup(@RequestBody GroupRequest requestObject){
-        System.out.println(requestObject);
         String message = "create " + "group " + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
-        System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
-        template.convertAndSend(STUDYING_QUEUE_KEY, message);
+        template.convertAndSend(STUDYING_ENTITY_QUEUE_KEY, message);
         return "redirect:/admin/1";
     }
 
@@ -33,7 +31,7 @@ public class GroupsController {
     public String updateGroup(@RequestBody GroupRequest requestObject, @PathVariable("id") int id){
         String message = "update " + "group " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         template.setExchange(DIRECT_EXCHANGE_NAME);
-        template.convertAndSend(STUDYING_QUEUE_KEY, message);
+        template.convertAndSend(STUDYING_ENTITY_QUEUE_KEY, message);
         return "redirect:/admin/1";
     }
 
@@ -41,7 +39,7 @@ public class GroupsController {
     public String deleteGroup(@PathVariable("id") int id){
         String message = new String("delete " + "group " + id);
         template.setExchange(DIRECT_EXCHANGE_NAME);
-        template.convertAndSend(STUDYING_QUEUE_KEY, message);
+        template.convertAndSend(STUDYING_ENTITY_QUEUE_KEY, message);
         return "redirect:/admin/1";
     }
 }
