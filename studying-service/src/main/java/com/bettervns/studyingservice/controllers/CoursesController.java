@@ -83,4 +83,8 @@ public class CoursesController {
         return "application/" + fileExtension;
     }
 
+    @GetMapping("/courses/group/{groupId}")
+    public ResponseEntity<?> getCoursesForGroup(@PathVariable("groupId") int groupId){
+        return ResponseEntity.ok(new Gson().toJson(courseDAO.getCoursesForGroup(groupId)));
+    }
 }
