@@ -43,7 +43,6 @@ public class StudentToCourseGroupDAO {
             StudentToCourseGroup studentToCourseGroupi = optionalStudentToCourseGroup.get();
             studentToCourseGroupi.setStudentId(updatedStudentToCourseGroup.getStudentId());
             studentToCourseGroupi.setCourseGroupId(updatedStudentToCourseGroup.getCourseGroupId());
-            studentToCourseGroupi.setStudentWorks(updatedStudentToCourseGroup.getStudentWorks());
             StudentToCourseGroupRepository.save(studentToCourseGroupi);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");

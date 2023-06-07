@@ -45,7 +45,7 @@ public class StudentWorkDAO {
             studentWorki.setStudentId(updatedStudentWork.getStudentId());
             studentWorki.setMark(updatedStudentWork.getMark());
             studentWorki.setFileLink(updatedStudentWork.getFileLink());
-            studentWorki.setStudentToCourseGroup(updatedStudentWork.getStudentToCourseGroup());
+            studentWorki.setStudentToCourseGroupId(updatedStudentWork.getStudentToCourseGroupId());
             StudentWorkRepository.save(studentWorki);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");

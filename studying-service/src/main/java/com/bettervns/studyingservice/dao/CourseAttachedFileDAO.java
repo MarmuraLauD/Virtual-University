@@ -43,7 +43,7 @@ public class CourseAttachedFileDAO {
             CourseAttachedFile courseAttachedFilei = optionalCourseAttachedFile.get();
             courseAttachedFilei.setName(updatedCourseAttachedFile.getName());
             courseAttachedFilei.setFileLink(updatedCourseAttachedFile.getFileLink());
-            courseAttachedFilei.setCourseToGroup(updatedCourseAttachedFile.getCourseToGroup());
+            courseAttachedFilei.setCourseToGroupId(updatedCourseAttachedFile.getCourseToGroupId());
             CourseAttachedFileRepository.save(courseAttachedFilei);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
