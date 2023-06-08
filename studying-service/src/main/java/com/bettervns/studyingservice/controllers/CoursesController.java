@@ -36,6 +36,8 @@ public class CoursesController {
         return ResponseEntity.ok(new Gson().toJson(courseDAO.getCourseById(id)));
     }
 
+    //TODO: Make normal file requesting logic!
+
     @PostMapping("/course/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
         try{

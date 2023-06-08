@@ -82,8 +82,6 @@ public class AuthRestController {
             UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
             //KMS in future
-            String filePathForPrivateKey = System.getProperty("user.home") + "/" + privateKeyFileName;
-            String filePathForPublicKey = System.getProperty("user.dir") + "/" + publicKeyFileName;
 
             String homeDir = System.getProperty("user.home");
             String filePathForPrivateKey = homeDir + "/" + privateKeyFileName;

@@ -4,6 +4,7 @@ import com.bettervns.adminservice.requests.TeacherRequest;
 import com.google.gson.GsonBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,29 +20,31 @@ public class TeachersController {
         this.template = rabbitTemplate;
     }
 
+    //TODO !! : create new user in jwt_secure when creating teacher or student. implement rabbit on security for this
     @PostMapping()
-    public String createTeacher(@RequestBody TeacherRequest requestObject){
+    public ResponseEntity<?> createTeacher(@RequestBody TeacherRequest requestObject){
         String message = "create " + 0 + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(TEACHERS_QUEUE_KEY, message);
-        return "redirect:/admin/1";
+        return ResponseEntity.ok("Successfully created");
     }
 
     @PatchMapping("/{id}")
-    public String updateTeacher(@RequestBody TeacherRequest requestObject, @PathVariable("id") int id){
+    public ResponseEntity<?> updateTeacher(@RequestBody TeacherRequest requestObject, @PathVariable("id") int id){
         String message = "update " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(TEACHERS_QUEUE_KEY, message);
-        return "redirect:/admin/1";
+        return ResponseEntity.ok("Successfully updated");
+
     }
 
     @DeleteMapping ("/{id}")
-    public String deleteTeacher(@PathVariable("id") int id){
+    public ResponseEntity<?> deleteTeacher(@PathVariable("id") int id){
         String message = new String("delete " + id);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(TEACHERS_QUEUE_KEY, message);
-        return "redirect:/admin/1";
+        return ResponseEntity.ok("Successfully deleted");
     }
 }

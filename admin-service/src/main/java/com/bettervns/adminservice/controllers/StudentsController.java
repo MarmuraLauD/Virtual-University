@@ -4,6 +4,7 @@ import com.bettervns.adminservice.requests.StudentRequest;
 import com.google.gson.GsonBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,30 +22,28 @@ public class StudentsController {
     }
 
     @PostMapping()
-    public String createStudent(@RequestBody StudentRequest requestObject){
+    public ResponseEntity<?> createStudent(@RequestBody StudentRequest requestObject){
         String message = "create " + 0 + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(STUDENTS_QUEUE_KEY, message);
-        return "redirect:/admin/1";
+        return ResponseEntity.ok("Successfully created");
     }
 
     @PatchMapping("/{id}")
-    public String updateStudent(@RequestBody StudentRequest requestObject, @PathVariable("id") int id){
+    public ResponseEntity<?> updateStudent(@RequestBody StudentRequest requestObject, @PathVariable("id") int id){
         String message = "update " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(STUDENTS_QUEUE_KEY, message);
-        return "redirect:/admin/1";
+        return ResponseEntity.ok("Successfully updated");
     }
 
     @DeleteMapping ("/{id}")
-    public String deleteStudent(@PathVariable("id") int id){
+    public ResponseEntity<?> deleteStudent(@PathVariable("id") int id){
         String message = new String("delete " + id);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(STUDENTS_QUEUE_KEY, message);
-        return "redirect:/admin/1";
+        return ResponseEntity.ok("Successfully deleted");
     }
-
-
 }
