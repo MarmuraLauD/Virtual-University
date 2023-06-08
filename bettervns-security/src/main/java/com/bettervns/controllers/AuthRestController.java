@@ -2,7 +2,6 @@ package com.bettervns.controllers;
 
 import com.bettervns.exception.TokenRefreshException;
 import com.bettervns.models.RefreshToken;
-import com.bettervns.repository.RoleRepository;
 import com.bettervns.repository.UserRepository;
 import com.bettervns.payloads.request.LoginRequest;
 import com.bettervns.payloads.response.MessageResponse;
@@ -39,7 +38,6 @@ public class AuthRestController {
 
     UserRepository userRepository;
 
-    RoleRepository roleRepository;
 
     PasswordEncoder encoder;
 
@@ -49,13 +47,11 @@ public class AuthRestController {
 
     public AuthRestController(AuthenticationManager authenticationManager,
                               UserRepository userRepository,
-                              RoleRepository roleRepository,
                               PasswordEncoder encoder,
                               JwtUtils jwtUtils,
                               RefreshTokenService refreshTokenService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.encoder = encoder;
         this.jwtUtils = jwtUtils;
         this.refreshTokenService = refreshTokenService;
@@ -83,9 +79,6 @@ public class AuthRestController {
 
             //KMS in future
 
-            String homeDir = System.getProperty("user.home");
-            String filePathForPrivateKey = homeDir + "/" + privateKeyFileName;
-            String filePathForPublicKey = "../bettervns/" + publicKeyFileName;
 
             File privateFile = new File(filePathForPrivateKey);
             boolean created = privateFile.createNewFile();
