@@ -34,10 +34,12 @@ public class MessageProcessor {
 
     public void updateStudent(String studentParams, int id){
         Student student = new GsonBuilder().setDateFormat("yyyy-MM-dd").create().fromJson(studentParams, Student.class);
+        System.out.println();
         studentDAO.update(id, student);
     }
 
     public void createStudent(String studentParams){
+        System.out.println(studentParams);
         Student student = new GsonBuilder().setDateFormat("yyyy-MM-dd").create().fromJson(studentParams, Student.class);
         studentDAO.add(student);
     }

@@ -16,21 +16,21 @@ import java.util.Optional;
 @Component
 public class AppointmentToGroupDAO {
 
-    private final AppointmentToGroupRepository AppointmentToGroupRepository;
+    private final AppointmentToGroupRepository appointmentToGroupRepository;
     private final EntityManager entityManager;
 
     @Autowired
     public AppointmentToGroupDAO(AppointmentToGroupRepository appointmentToGroupRepository, EntityManager entityManager) {
-        this.AppointmentToGroupRepository = appointmentToGroupRepository;
+        this.appointmentToGroupRepository = appointmentToGroupRepository;
         this.entityManager = entityManager;
     }
 
     public List<AppointmentToGroup> getAllAppointmentToGroups() {
-        return AppointmentToGroupRepository.findAll();
+        return appointmentToGroupRepository.findAll();
     }
 
     public AppointmentToGroup getAppointmentToGroupById(int id) {
-        Optional<AppointmentToGroup> appointmentToGroups = AppointmentToGroupRepository.findById(id);
+        Optional<AppointmentToGroup> appointmentToGroups = appointmentToGroupRepository.findById(id);
         if (appointmentToGroups.isPresent()) {
             return appointmentToGroups.get();
         } else {
@@ -56,29 +56,30 @@ public class AppointmentToGroupDAO {
 
     public void removeAppointmentToGroup(int groupId, int appointmentId){
         TypedQuery<AppointmentToGroup> query = entityManager.createQuery(
-                "DELETE FROM AppointmentToGroup a WHERE a.appointmentId = :appointmentId AND a.groupId = :groupId", AppointmentToGroup.class);
+                "SELECT a FROM AppointmentToGroup a WHERE a.appointmentId = :appointmentId AND a.groupId = :groupId", AppointmentToGroup.class);
         query.setParameter("groupId", groupId);
         query.setParameter("appointmentId", appointmentId);
-        query.executeUpdate();
+        List<AppointmentToGroup> resultList = query.getResultList();
+        appointmentToGroupRepository.delete(resultList.get(0));
     }
 
     public AppointmentToGroup add(AppointmentToGroup appointmentToGroup) {
-        return AppointmentToGroupRepository.save(appointmentToGroup);
+        return appointmentToGroupRepository.save(appointmentToGroup);
     }
 
     public void update(int id, AppointmentToGroup updatedAppointmentToGroup) {
-        Optional<AppointmentToGroup> optionalAppointmentToGroup = AppointmentToGroupRepository.findById(id);
+        Optional<AppointmentToGroup> optionalAppointmentToGroup = appointmentToGroupRepository.findById(id);
         if (optionalAppointmentToGroup.isPresent()) {
             AppointmentToGroup appointmentToGroupi = optionalAppointmentToGroup.get();
             appointmentToGroupi.setAppointmentId(updatedAppointmentToGroup.getAppointmentId());
             appointmentToGroupi.setGroupId(updatedAppointmentToGroup.getGroupId());
-            AppointmentToGroupRepository.save(appointmentToGroupi);
+            appointmentToGroupRepository.save(appointmentToGroupi);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
         }
     }
 
     public void delete(int id) {
-        AppointmentToGroupRepository.deleteById(id);
+        appointmentToGroupRepository.deleteById(id);
     }
 }

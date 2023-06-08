@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQCreationConfig {
 
     private static final String STUDENTS_QUEUE_NAME = "studentsQueue";
+    private static final String SECURITY_QUEUE_NAME = "securityQueue";
     private static final String TEACHERS_QUEUE_NAME = "teachersQueue";
     private static final String STUDYING_ENTITY_QUEUE_NAME = "studyingEntityQueue";
     private static final String STUDYING_ATTACHMENT_QUEUE_NAME = "studyingAttachmentQueue";
@@ -40,6 +41,11 @@ public class RabbitMQCreationConfig {
     }
 
     @Bean
+    Queue securityQueue() {
+        return new Queue(SECURITY_QUEUE_NAME, false);
+    }
+
+    @Bean
     Queue studyingEntityQueue() {
         return new Queue(STUDYING_ENTITY_QUEUE_NAME, false);
     }
@@ -52,6 +58,11 @@ public class RabbitMQCreationConfig {
     @Bean
     Binding studentsQueueBinding(Queue studentsQueue, DirectExchange directExchange) {
         return BindingBuilder.bind(studentsQueue).to(directExchange).with(STUDENTS_QUEUE_NAME);
+    }
+
+    @Bean
+    Binding securityQueueBinding(Queue securityQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(securityQueue).to(directExchange).with(SECURITY_QUEUE_NAME);
     }
 
     @Bean

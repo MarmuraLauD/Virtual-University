@@ -5,6 +5,7 @@ public record TeacherRequest(
     String surname,
     String father,
     String departmentId,
-    String email
+    String email,
+    String password
 ) {
 }

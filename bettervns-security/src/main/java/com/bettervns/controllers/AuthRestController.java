@@ -79,6 +79,8 @@ public class AuthRestController {
 
             //KMS in future
 
+            String filePathForPrivateKey = System.getProperty("user.home") + "/" + privateKeyFileName;
+            String filePathForPublicKey = System.getProperty("user.dir") + "/" + publicKeyFileName;
 
             File privateFile = new File(filePathForPrivateKey);
             boolean created = privateFile.createNewFile();
