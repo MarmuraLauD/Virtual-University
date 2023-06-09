@@ -120,7 +120,7 @@ public class CoursesController {
                 courseToGroup.getCourseId() + "\\" + courseToGroup.getGroupId() + "\\materials\\";
         String filePath = directory + "\\" + courseMaterial.getFileName();
         File file = new File(filePath);
-        if (!file.delete()) return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete the file attached to material");
+        if (!file.delete()) System.out.println(("Failed to delete the file attached to material"));
         courseMaterialDAO.delete(materialId);
         return ResponseEntity.ok("Material deleted");
     }
@@ -128,6 +128,9 @@ public class CoursesController {
     @PostMapping("/course/material_file/{materialId}")
     public ResponseEntity<?> uploadMaterialFile(@RequestParam("file") MultipartFile file, @PathVariable int materialId) {
         try{
+            if (courseMaterialDAO.getCourseMaterialsByFileName(file.getOriginalFilename()).size() > 0){
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File with this name is already uploaded");
+            }
             CourseToGroup courseToGroup = courseToGroupDAO.getCourseToGroupById(
                     courseMaterialDAO.getCourseMaterialById(materialId).getCourseToGroupId());
             String fileName = file.getOriginalFilename();
@@ -171,6 +174,16 @@ public class CoursesController {
 
     @PatchMapping("/course/material_file/{materialId}")
     public ResponseEntity<?> updateMaterialFile(@RequestParam("file") MultipartFile file, @PathVariable int materialId) {
+        List<CourseMaterial> materials = courseMaterialDAO.getCourseMaterialsByFileName(file.getOriginalFilename());
+        /*for (CourseMaterial i: materials){
+            if (i.getId() == materialId) materials.remove(i);
+        }*/
+        for (int i = 0; i < materials.size(); i++){
+            if (materials.get(i).getId() == materialId) materials.remove(i);
+        }
+        if (materials.size() > 0){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File with this name is already uploaded");
+        }
         CourseMaterial courseMaterial = courseMaterialDAO.getCourseMaterialById(materialId);
         CourseToGroup courseToGroup = courseToGroupDAO.getCourseToGroupById(
                 courseMaterialDAO.getCourseMaterialById(materialId).getCourseToGroupId());

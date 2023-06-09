@@ -1,13 +1,9 @@
 package com.bettervns.studyingservice.dao;
 
-import com.bettervns.studyingservice.models.AppointmentToGroup;
 import com.bettervns.studyingservice.models.Course;
 import com.bettervns.studyingservice.models.CourseToGroup;
-import com.bettervns.studyingservice.models.Group;
 import com.bettervns.studyingservice.repository.CourseRepository;
-import com.bettervns.studyingservice.repository.CourseToGroupRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -47,7 +43,7 @@ public class CourseDAO {
 
     public List<Course> getCoursesForGroup(int groupId){
         List<Integer> coursesIDs = new ArrayList<>();
-        List<CourseToGroup> courseToGroups = courseToGroupDAO.getCourseToGroupByGroupId(groupId);
+        List<CourseToGroup> courseToGroups = courseToGroupDAO.getCourseToGroupsByGroupId(groupId);
         for (CourseToGroup i : courseToGroups){
             if (!coursesIDs.contains(i.getCourseId())) coursesIDs.add(i.getCourseId());
         }

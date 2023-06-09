@@ -1,7 +1,6 @@
 package com.bettervns.studyingservice.dao;
 
 import com.bettervns.studyingservice.models.CourseToGroup;
-import com.bettervns.studyingservice.models.Group;
 import com.bettervns.studyingservice.repository.CourseToGroupRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -39,10 +38,18 @@ public class CourseToGroupDAO {
         }
     }
 
-    public List<CourseToGroup> getCourseToGroupByGroupId(int groupId) {
+    public List<CourseToGroup> getCourseToGroupsByGroupId(int groupId) {
         TypedQuery<CourseToGroup> query = entityManager.createQuery(
                 "SELECT g FROM CourseToGroup g WHERE g.groupId = :groupId", CourseToGroup.class);
         query.setParameter("groupId", groupId);
+        List<CourseToGroup> resultList = query.getResultList();
+        return resultList;
+    }
+
+    public List<CourseToGroup> getCourseToGroupsByCourseId(int courseId) {
+        TypedQuery<CourseToGroup> query = entityManager.createQuery(
+                "SELECT g FROM CourseToGroup g WHERE g.courseId = :courseId", CourseToGroup.class);
+        query.setParameter("courseId", courseId);
         List<CourseToGroup> resultList = query.getResultList();
         return resultList;
     }
