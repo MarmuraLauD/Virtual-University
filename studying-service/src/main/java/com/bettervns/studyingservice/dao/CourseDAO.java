@@ -58,6 +58,10 @@ public class CourseDAO {
         return resultList;
     }
 
+    public List<Course> getCoursesForTeacher(int teacherId){
+        return courseRepository.findByTeacherId(teacherId);
+    }
+
     public Course add(Course course) {
         return courseRepository.save(course);
     }

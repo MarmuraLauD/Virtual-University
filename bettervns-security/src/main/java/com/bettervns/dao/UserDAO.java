@@ -67,7 +67,6 @@ public class UserDAO {
 
     public void update(User updatedUser) {
         Optional<User> optionalUser = userRepository.findByEmail(updatedUser.getEmail());
-        System.out.println(optionalUser.get());
         if (optionalUser.isPresent()) {
             User useri = optionalUser.get();
             useri.setEmail(updatedUser.getEmail());

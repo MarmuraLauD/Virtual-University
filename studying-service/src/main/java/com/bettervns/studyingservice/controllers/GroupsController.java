@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/studying")
 public class GroupsController {
-
     private final GroupDAO groupDAO;
 
     @Autowired
