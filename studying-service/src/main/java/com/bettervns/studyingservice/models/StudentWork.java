@@ -17,7 +17,7 @@ public class StudentWork {
     @Column(name = "description", nullable = false)
     private String description;
     @Column(name = "mark", nullable = true)
-    private int mark;
+    private int mark = -1;
     @Column(name = "student_course_group_id", nullable = false)
     private int studentToCourseGroupId;
     @Column(name="filename", nullable = true)

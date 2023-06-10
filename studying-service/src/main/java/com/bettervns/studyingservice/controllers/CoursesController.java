@@ -289,6 +289,14 @@ public class CoursesController {
         return ResponseEntity.ok("Student work added successfully");
     }
 
+    @PatchMapping("/course/student_work/evaluate/{workId}")
+    public ResponseEntity<?> evaluateStudentWork(@PathVariable int workId, @RequestParam int mark){
+        StudentWork newWork =  studentWorkDAO.getStudentWorkById(workId);
+        newWork.setMark(mark);
+        studentWorkDAO.update(workId, newWork);
+        return ResponseEntity.ok("Successfully evaluated");
+    }
+
     @PatchMapping("/course/student_work/{workId}")
     public ResponseEntity<?> updateStudentWork(@RequestBody StudentWorkRequest studentWorkRequest, @PathVariable int workId){
         List<CourseToGroup> courseToGroups = courseToGroupDAO.getAllCourseToGroups();
