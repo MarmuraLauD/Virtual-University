@@ -13,19 +13,19 @@ import java.util.Optional;
 @Component
 public class StudentToCourseGroupDAO {
 
-    private final StudentToCourseGroupRepository StudentToCourseGroupRepository;
+    private final StudentToCourseGroupRepository studentToCourseGroupRepository;
 
     @Autowired
     public StudentToCourseGroupDAO(StudentToCourseGroupRepository StudentToCourseGroupRepository) {
-        this.StudentToCourseGroupRepository = StudentToCourseGroupRepository;
+        this.studentToCourseGroupRepository = StudentToCourseGroupRepository;
     }
 
     public List<StudentToCourseGroup> getAllStudentToCourseGroups() {
-        return StudentToCourseGroupRepository.findAll();
+        return studentToCourseGroupRepository.findAll();
     }
 
     public StudentToCourseGroup getStudentToCourseGroupById(int id) {
-        Optional<StudentToCourseGroup> studentToCourseGroups = StudentToCourseGroupRepository.findById(id);
+        Optional<StudentToCourseGroup> studentToCourseGroups = studentToCourseGroupRepository.findById(id);
         if (studentToCourseGroups.isPresent()) {
             return studentToCourseGroups.get();
         } else {
@@ -33,23 +33,27 @@ public class StudentToCourseGroupDAO {
         }
     }
 
+    public List<StudentToCourseGroup> getStudentToCourseGroupByCourseGroupId(int courseGroupId) {
+        return studentToCourseGroupRepository.findByCourseGroupId(courseGroupId);
+    }
+
     public StudentToCourseGroup add(StudentToCourseGroup studentToCourseGroup) {
-        return StudentToCourseGroupRepository.save(studentToCourseGroup);
+        return studentToCourseGroupRepository.save(studentToCourseGroup);
     }
 
     public void update(int id, StudentToCourseGroup updatedStudentToCourseGroup) {
-        Optional<StudentToCourseGroup> optionalStudentToCourseGroup = StudentToCourseGroupRepository.findById(id);
+        Optional<StudentToCourseGroup> optionalStudentToCourseGroup = studentToCourseGroupRepository.findById(id);
         if (optionalStudentToCourseGroup.isPresent()) {
             StudentToCourseGroup studentToCourseGroupi = optionalStudentToCourseGroup.get();
             studentToCourseGroupi.setStudentId(updatedStudentToCourseGroup.getStudentId());
             studentToCourseGroupi.setCourseGroupId(updatedStudentToCourseGroup.getCourseGroupId());
-            StudentToCourseGroupRepository.save(studentToCourseGroupi);
+            studentToCourseGroupRepository.save(studentToCourseGroupi);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
         }
     }
 
     public void delete(int id) {
-        StudentToCourseGroupRepository.deleteById(id);
+        studentToCourseGroupRepository.deleteById(id);
     }
 }
