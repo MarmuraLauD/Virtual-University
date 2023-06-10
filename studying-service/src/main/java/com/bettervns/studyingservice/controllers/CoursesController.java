@@ -3,7 +3,7 @@ package com.bettervns.studyingservice.controllers;
 import com.bettervns.studyingservice.dao.*;
 import com.bettervns.studyingservice.models.CourseMaterial;
 import com.bettervns.studyingservice.models.CourseToGroup;
-import com.bettervns.studyingservice.models.StudentToCourseGroup;
+import com.bettervns.studyingservice.models.StudentAnswer;
 import com.bettervns.studyingservice.models.StudentWork;
 import com.bettervns.studyingservice.requests.CourseMaterialRequest;
 import com.bettervns.studyingservice.requests.StudentWorkRequest;
@@ -28,20 +28,19 @@ import java.util.List;
 @RequestMapping("/studying")
 public class CoursesController {
     private final CourseDAO courseDAO;
-    private final StudentToCourseGroupDAO studentToCourseGroupDAO;
     private final CourseToGroupDAO courseToGroupDAO;
     private final CourseMaterialDAO courseMaterialDAO;
     private final StudentWorkDAO studentWorkDAO;
+    private final StudentAnswerDAO studentAnswerDAO;
 
     @Autowired
-    public CoursesController(CourseDAO courseDAO, StudentToCourseGroupDAO studentToCourseGroupDAO,
-                             CourseToGroupDAO courseToGroupDAO, CourseMaterialDAO courseMaterialDAO,
-                             StudentWorkDAO studentWorkDAO) {
+    public CoursesController(CourseDAO courseDAO, CourseToGroupDAO courseToGroupDAO,
+                             CourseMaterialDAO courseMaterialDAO, StudentWorkDAO studentWorkDAO, StudentAnswerDAO studentAnswerDAO) {
         this.courseDAO = courseDAO;
-        this.studentToCourseGroupDAO = studentToCourseGroupDAO;
         this.courseToGroupDAO = courseToGroupDAO;
         this.courseMaterialDAO = courseMaterialDAO;
         this.studentWorkDAO = studentWorkDAO;
+        this.studentAnswerDAO = studentAnswerDAO;
     }
 
     @GetMapping("/courses")
@@ -240,109 +239,141 @@ public class CoursesController {
     }
 
     @GetMapping("/course/student_works")
-    public ResponseEntity<?> getStudentWorks(@RequestParam int courseId, @RequestParam int groupId, @RequestParam int studentId){
-        List<CourseToGroup> courseToGroups = courseToGroupDAO.getAllCourseToGroups();
-        CourseToGroup courseToGroup = null;
-        for (CourseToGroup i : courseToGroups){
-            if (i.getCourseId() == courseId && i.getGroupId() == groupId){
-                courseToGroup = i;
-                break;
-            }
-        }
-        List<StudentToCourseGroup> studentToCourseGroups =
-                studentToCourseGroupDAO.getStudentToCourseGroupByCourseGroupId(courseToGroup.getId());
-        StudentToCourseGroup studentToCourseGroup = null;
-        for (StudentToCourseGroup i : studentToCourseGroups){
-            if (i.getStudentId() == studentId){
-                studentToCourseGroup = i;
-                break;
-            }
-        }
+    public ResponseEntity<?> getStudentWorks(@RequestParam int courseId, @RequestParam int groupId){
         return ResponseEntity.ok(new Gson().toJson(
-                studentWorkDAO.getAllStudentWorksByStudentCourseGroupId(studentToCourseGroup.getId())));
+                studentWorkDAO.getAllStudentWorksByCourseGroupId(
+                        courseToGroupDAO.getByCourseIdAndGroupId(courseId, groupId).getId()
+                )
+        ));
     }
 
     @PostMapping("/course/student_works")
     public ResponseEntity<?> addStudentWork(@RequestBody StudentWorkRequest studentWorkRequest){
-        List<CourseToGroup> courseToGroups = courseToGroupDAO.getAllCourseToGroups();
-        CourseToGroup courseToGroup = null;
-        for (CourseToGroup i : courseToGroups){
-            if (i.getCourseId() == Integer.parseInt(studentWorkRequest.courseId()) &&
-                    i.getGroupId() == Integer.parseInt(studentWorkRequest.groupId())){
-                courseToGroup = i;
-                break;
-            }
-        }
-        List<StudentToCourseGroup> studentToCourseGroups =
-                studentToCourseGroupDAO.getStudentToCourseGroupByCourseGroupId(courseToGroup.getId());
-        StudentToCourseGroup studentToCourseGroup = null;
-        for (StudentToCourseGroup i : studentToCourseGroups){
-            if (i.getStudentId() == Integer.parseInt(studentWorkRequest.studentId())){
-                studentToCourseGroup = i;
-                break;
-            }
-        }
+        CourseToGroup courseToGroup = courseToGroupDAO.getByCourseIdAndGroupId(
+                Integer.parseInt(studentWorkRequest.courseId()),
+                Integer.parseInt(studentWorkRequest.groupId())
+        );
         StudentWork work = new StudentWork(studentWorkRequest.workName(), studentWorkRequest.description(),
-                studentToCourseGroup.getId());
-        System.out.println(work);
+                courseToGroup.getId());
         studentWorkDAO.add(work);
-        return ResponseEntity.ok("Student work added successfully");
-    }
-
-    @PatchMapping("/course/student_work/evaluate/{workId}")
-    public ResponseEntity<?> evaluateStudentWork(@PathVariable int workId, @RequestParam int mark){
-        StudentWork newWork =  studentWorkDAO.getStudentWorkById(workId);
-        newWork.setMark(mark);
-        studentWorkDAO.update(workId, newWork);
-        return ResponseEntity.ok("Successfully evaluated");
+        return ResponseEntity.ok("Student work successfully added");
     }
 
     @PatchMapping("/course/student_work/{workId}")
-    public ResponseEntity<?> updateStudentWork(@RequestBody StudentWorkRequest studentWorkRequest, @PathVariable int workId){
-        List<CourseToGroup> courseToGroups = courseToGroupDAO.getAllCourseToGroups();
-        CourseToGroup courseToGroup = null;
-        for (CourseToGroup i : courseToGroups){
-            if (i.getCourseId() == Integer.parseInt(studentWorkRequest.courseId()) &&
-                    i.getGroupId() == Integer.parseInt(studentWorkRequest.groupId())){
-                courseToGroup = i;
-                break;
-            }
-        }
-        List<StudentToCourseGroup> studentToCourseGroups =
-                studentToCourseGroupDAO.getStudentToCourseGroupByCourseGroupId(courseToGroup.getId());
-        StudentToCourseGroup studentToCourseGroup = null;
-        for (StudentToCourseGroup i : studentToCourseGroups){
-            if (i.getStudentId() == Integer.parseInt(studentWorkRequest.studentId())){
-                studentToCourseGroup = i;
-                break;
-            }
-        }
-
-        StudentWork newWork = studentWorkDAO.getStudentWorkById(workId);
-        newWork.setStudentToCourseGroupId(studentToCourseGroup.getId());
+    public ResponseEntity<?> editStudentWork(@PathVariable int workId, @RequestBody StudentWorkRequest studentWorkRequest){
+        StudentWork newWork =  studentWorkDAO.getStudentWorkById(workId);
         newWork.setDescription(studentWorkRequest.description());
         newWork.setName(studentWorkRequest.workName());
         studentWorkDAO.update(workId, newWork);
-        return ResponseEntity.ok("Student work updated successfully");
+        return ResponseEntity.ok("Student work successfully edited");
     }
 
     @DeleteMapping("/course/student_work/{workId}")
     public ResponseEntity<?> deleteStudentWork(@PathVariable int workId) {
-        StudentWork studentWork = studentWorkDAO.getStudentWorkById(workId);
-        StudentToCourseGroup studentToCourseGroup = studentToCourseGroupDAO.getStudentToCourseGroupById(studentWork.getStudentToCourseGroupId());
-        CourseToGroup courseToGroup = courseToGroupDAO.getCourseToGroupById(studentToCourseGroup.getCourseGroupId());
-        if (studentWork.getFileName() != null) {
-            String directory = "C:\\dev\\files_storage\\" +
-                    courseToGroup.getCourseId() + "\\" + courseToGroup.getGroupId() + "\\student_works\\" +
-                    studentToCourseGroup.getStudentId() + "\\";
-            String filePath = directory + "\\" + studentWork.getFileName();
-            File file = new File(filePath);
-            if (!file.delete()) System.out.println(("Failed to delete the file attached to material"));
-        }
         studentWorkDAO.delete(workId);
-        return ResponseEntity.ok("Material deleted");
+        return ResponseEntity.ok("Student work successfully deleted");
     }
 
+    @GetMapping("/course/student_works/student_answers")
+    public ResponseEntity<?> getStudentAnswersForStudentWork(@RequestParam int studentWorkId ){
+        return ResponseEntity.ok(new Gson().toJson(studentAnswerDAO.getAllStudentAnswersByStudentWorkId(studentWorkId)));
+    }
+
+    @GetMapping("/course/student_works/student_answer/{studentAnswerId}")
+    public ResponseEntity<?> downloadStudentAnswerById(@PathVariable int studentAnswerId){
+        StudentAnswer studentAnswer = studentAnswerDAO.getStudentAnswerById(studentAnswerId);
+        StudentWork studentWork = studentWorkDAO.getStudentWorkById(studentAnswer.getStudentWorkId());
+        CourseToGroup courseToGroup = courseToGroupDAO.getCourseToGroupById(studentWork.getCourseGroupId());
+        try {
+            String directory = "C:\\dev\\files_storage\\" +
+                    courseToGroup.getCourseId() + "\\" + courseToGroup.getGroupId() + "\\student_works\\" +
+                    studentWork.getId() + "\\" + studentAnswer.getStudentId() + "\\";
+            String filePath = directory + "\\" + studentAnswer.getFileName();
+            Resource resource = loadFileAsResource(filePath);
+            String contentType = determineContentType(studentAnswer.getFileName());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error downloading the file");
+        }
+    }
+
+    @GetMapping("/course/student_works/student_answer/student")
+    public ResponseEntity<?> downloadStudentAnswerByStudentId(@RequestParam int studentId, @RequestParam int studentWorkId){
+        StudentAnswer studentAnswer = studentAnswerDAO.getByStudentWorkIdAndStudentId(studentWorkId, studentId);
+        StudentWork studentWork = studentWorkDAO.getStudentWorkById(studentAnswer.getStudentWorkId());
+        CourseToGroup courseToGroup = courseToGroupDAO.getCourseToGroupById(studentWork.getCourseGroupId());
+        try {
+            String directory = "C:\\dev\\files_storage\\" +
+                    courseToGroup.getCourseId() + "\\" + courseToGroup.getGroupId() + "\\student_works\\" +
+                    studentWork.getId() + "\\" + studentAnswer.getStudentId() + "\\";
+            String filePath = directory + "\\" + studentAnswer.getFileName();
+            Resource resource = loadFileAsResource(filePath);
+            String contentType = determineContentType(studentAnswer.getFileName());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                    .body(resource);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error downloading the file");
+        }
+    }
+
+    @PostMapping("/course/student_works/student_answers")
+    public ResponseEntity<?> uploadStudentAnswer(@RequestParam("file") MultipartFile file,
+                                                   @RequestParam int studentId, @RequestParam int studentWorkId) {
+        try {
+            StudentWork work = studentWorkDAO.getStudentWorkById(studentWorkId);
+            CourseToGroup courseToGroup = courseToGroupDAO.getCourseToGroupById(work.getCourseGroupId());
+            String fileName = file.getOriginalFilename();
+            String dir = "C:\\dev\\files_storage\\" + courseToGroup.getCourseId() + "\\" +
+                    courseToGroup.getGroupId() + "\\student_works\\" + studentWorkId + "\\" + studentId + "\\";
+            File directory = new File(dir);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            String destPath = dir + fileName;
+            studentAnswerDAO.add(new StudentAnswer(fileName, studentId, studentWorkId));
+            file.transferTo(new File(destPath));
+            return ResponseEntity.ok("File uploaded successfully");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading the file");
+        }
+    }
+
+    @PatchMapping("/course/student_works/student_answer/{studentAnswerId}")
+    public ResponseEntity<?> evaluateStudentAnswer(@PathVariable int studentAnswerId, @RequestParam int mark) {
+        StudentAnswer newAnswer = studentAnswerDAO.getStudentAnswerById(studentAnswerId);
+        newAnswer.setMark(mark);
+        studentAnswerDAO.update(newAnswer.getId(), newAnswer);
+        return ResponseEntity.ok("Student answer successfully evaluated");
+    }
+
+    @DeleteMapping("/course/student_works/student_answer/{answerId}")
+    public ResponseEntity<?> deleteStudentAnswer(@PathVariable int answerId) {
+        StudentAnswer answer = studentAnswerDAO.getStudentAnswerById(answerId);
+        StudentWork work = studentWorkDAO.getStudentWorkById(answer.getStudentWorkId());
+        CourseToGroup courseToGroup = courseToGroupDAO.getCourseToGroupById(work.getCourseGroupId());
+        String directory = "C:\\dev\\files_storage\\" + courseToGroup.getCourseId() + "\\" +
+                courseToGroup.getGroupId() + "\\student_works\\" + work.getId() + "\\" + answer.getStudentId() + "\\";
+        String filePath = directory + "\\" + answer.getFileName();
+        File file = new File(filePath);
+        if (file.delete()) {
+            studentAnswerDAO.delete(answer.getId());
+            return ResponseEntity.ok("File deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete the file");
+        }
+    }
+
+    /*
     @GetMapping("/course/student_work_file/{workId}")
     public ResponseEntity<?> downloadStudentWorkFile(@PathVariable int workId) {
         StudentWork studentWork = studentWorkDAO.getStudentWorkById(workId);
@@ -366,74 +397,6 @@ public class CoursesController {
         }
     }
 
-    @PostMapping("/course/student_work_file/{workId}")
-    public ResponseEntity<?> uploadStudentWorkFile(@RequestParam("file") MultipartFile file, @PathVariable int workId) {
-        try {
-            if (studentWorkDAO.getAllStudentWorksByFilename(file.getOriginalFilename()).size() > 0){
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File with this name is already uploaded");
-            }
-            StudentToCourseGroup studentToCourseGroup = studentToCourseGroupDAO.getStudentToCourseGroupById(
-                    studentWorkDAO.getStudentWorkById(workId).getStudentToCourseGroupId());
-            CourseToGroup courseToGroup = courseToGroupDAO.getCourseToGroupById(studentToCourseGroup.getCourseGroupId());
-            String fileName = file.getOriginalFilename();
-            String dir = "C:\\dev\\files_storage\\" + courseToGroup.getCourseId() + "\\" +
-                    courseToGroup.getGroupId() + "\\student_works\\" + studentToCourseGroup.getStudentId() + "\\";
-            File directory = new File(dir);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-            String destPath = dir + fileName;
-            StudentWork newWork = studentWorkDAO.getStudentWorkById(workId);
-            newWork.setFileName(fileName);
-            studentWorkDAO.update(workId, newWork);
-            file.transferTo(new File(destPath));
-            return ResponseEntity.ok("File uploaded successfully");
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading the file");
-        }
-
-    }
-
-    @PatchMapping("/course/student_work_file/{workId}")
-    public ResponseEntity<?> updateStudentWorkFile(@RequestParam("file") MultipartFile file, @PathVariable int workId) {
-        List<StudentWork> works = studentWorkDAO.getAllStudentWorksByFilename(file.getOriginalFilename());
-        for (int i = 0; i < works.size(); i++){
-            if (works.get(i).getId() == workId) works.remove(i);
-        }
-        if (works.size() > 0){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("File with this name is already uploaded");
-        }
-        StudentWork studentWork = studentWorkDAO.getStudentWorkById(workId);
-        StudentToCourseGroup studentToCourseGroup = studentToCourseGroupDAO.getStudentToCourseGroupById(studentWork.getStudentToCourseGroupId());
-        CourseToGroup courseToGroup = courseToGroupDAO.getCourseToGroupById(studentToCourseGroup.getCourseGroupId());
-        String directory = "C:\\dev\\files_storage\\" +
-                courseToGroup.getCourseId() + "\\" + courseToGroup.getGroupId() +
-                "\\student_works\\" + studentToCourseGroup.getStudentId() + "\\";
-        String filePath = directory + "\\" + studentWork.getFileName();
-        File oldFile = new File(filePath);
-        if (oldFile.delete()) {
-            try{
-                String fileName = file.getOriginalFilename();
-                String destPath = "C:\\dev\\files_storage\\" + courseToGroup.getCourseId() + "\\" +
-                        courseToGroup.getGroupId() + "\\student_works\\" +
-                        studentToCourseGroup.getStudentId() + "\\" + fileName;
-                StudentWork newWork= studentWorkDAO.getStudentWorkById(workId);
-                newWork.setFileName(fileName);
-                studentWorkDAO.update(workId, newWork);
-                file.transferTo(new File(destPath));
-                return ResponseEntity.ok("File updated successfully");
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating new file");
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to deleting old file");
-        }
-    }
-
     @DeleteMapping("/course/student_work_file/{workId}")
     public ResponseEntity<?> deleteStudentWorkFile(@PathVariable int workId) {
         StudentWork studentWork = studentWorkDAO.getStudentWorkById(workId);
@@ -452,7 +415,7 @@ public class CoursesController {
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete the file");
         }
-    }
+    }*/
 
     private Resource loadFileAsResource(String filePath) throws IOException {
         Path file = Paths.get(filePath);

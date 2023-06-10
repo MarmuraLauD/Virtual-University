@@ -13,7 +13,7 @@ import java.util.Optional;
 @Component
 public class StudentWorkDAO {
 
-    private final StudentWorkRepository studentWorkRepository;
+    public final StudentWorkRepository studentWorkRepository;
 
     @Autowired
     public StudentWorkDAO(StudentWorkRepository studentWorkRepository) {
@@ -33,12 +33,8 @@ public class StudentWorkDAO {
         }
     }
 
-    public List<StudentWork> getAllStudentWorksByStudentCourseGroupId(int studentToCourseGroupId) {
-        return studentWorkRepository.findByStudentToCourseGroupId(studentToCourseGroupId);
-    }
-
-    public List<StudentWork> getAllStudentWorksByFilename(String fileName){
-        return studentWorkRepository.findByFileName(fileName);
+    public List<StudentWork> getAllStudentWorksByCourseGroupId(int courseGroupId) {
+        return studentWorkRepository.findAllByCourseGroupId(courseGroupId);
     }
 
     public StudentWork add(StudentWork studentWork) {
@@ -52,9 +48,7 @@ public class StudentWorkDAO {
             studentWorki.setId(updatedStudentWork.getId());
             studentWorki.setName(updatedStudentWork.getName());
             studentWorki.setDescription(updatedStudentWork.getDescription());
-            studentWorki.setMark(updatedStudentWork.getMark());
-            studentWorki.setStudentToCourseGroupId(updatedStudentWork.getStudentToCourseGroupId());
-            studentWorki.setFileName(updatedStudentWork.getFileName());
+            studentWorki.setCourseGroupId(updatedStudentWork.getCourseGroupId());
             studentWorkRepository.save(studentWorki);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");

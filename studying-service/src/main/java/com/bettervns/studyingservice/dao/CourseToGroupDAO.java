@@ -54,6 +54,10 @@ public class CourseToGroupDAO {
         return resultList;
     }
 
+    public CourseToGroup getByCourseIdAndGroupId(int courseId, int groupId){
+        return courseToGroupRepository.findByCourseIdAndGroupId(courseId, groupId);
+    }
+
     public CourseToGroup add(CourseToGroup courseToGroup) {
         return courseToGroupRepository.save(courseToGroup);
     }

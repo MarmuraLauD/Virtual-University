@@ -16,14 +16,15 @@ public class StudentWork {
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "description", nullable = false, length = 1000)
-    //@Nationalized
     private String description;
-    @Column(name = "mark", nullable = true)
-    private int mark = -1;
-    @Column(name = "student_course_group_id", nullable = false)
-    private int studentToCourseGroupId;
-    @Column(name="filename", nullable = true)
-    private String fileName;
+    @Column(name = "course_group_id", nullable = false)
+    private int courseGroupId;
+
+    public StudentWork(String name, String description, int courseGroupId) {
+        this.name = name;
+        this.description = description;
+        this.courseGroupId = courseGroupId;
+    }
 
     public int getId() {
         return id;
@@ -49,41 +50,21 @@ public class StudentWork {
         this.description = description;
     }
 
-    public int getMark() {
-        return mark;
+    public int getCourseGroupId() {
+        return courseGroupId;
     }
 
-    public void setMark(int mark) {
-        this.mark = mark;
+    public void setCourseGroupId(int courseGroupId) {
+        this.courseGroupId = courseGroupId;
     }
 
-    public int getStudentToCourseGroupId() {
-        return studentToCourseGroupId;
-    }
-
-    public void setStudentToCourseGroupId(int studentToCourseGroupId) {
-        this.studentToCourseGroupId = studentToCourseGroupId;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String filename) {
-        this.fileName = filename;
-    }
-
-    public StudentWork(String name, String description, int studentToCourseGroupId) {
-        this.name = name;
-        this.description = description;
-        this.studentToCourseGroupId = studentToCourseGroupId;
-    }
-
-    public StudentWork(String name, String description, int mark, int studentToCourseGroupId, String fileName) {
-        this.name = name;
-        this.description = description;
-        this.mark = mark;
-        this.studentToCourseGroupId = studentToCourseGroupId;
-        this.fileName = fileName;
+    @Override
+    public String toString() {
+        return "StudentWork{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", courseGroupId=" + courseGroupId +
+                '}';
     }
 }
