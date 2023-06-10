@@ -14,7 +14,7 @@ public class CourseMaterial {
     private int id;
     @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 1000)
     private String description;
     @Column(name = "file_name", nullable = true)
     private String fileName;

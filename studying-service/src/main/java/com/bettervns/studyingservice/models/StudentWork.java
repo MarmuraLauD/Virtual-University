@@ -3,6 +3,7 @@ package com.bettervns.studyingservice.models;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Nationalized;
 
 @Data
 @Entity
@@ -14,7 +15,8 @@ public class StudentWork {
     private int id;
     @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = false, length = 1000)
+    //@Nationalized
     private String description;
     @Column(name = "mark", nullable = true)
     private int mark = -1;
@@ -22,7 +24,6 @@ public class StudentWork {
     private int studentToCourseGroupId;
     @Column(name="filename", nullable = true)
     private String fileName;
-
 
     public int getId() {
         return id;
