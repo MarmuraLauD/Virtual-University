@@ -274,6 +274,8 @@ public class CoursesController {
         return ResponseEntity.ok("Student work successfully deleted");
     }
 
+    //TODO! Create foreign key constraints in DB
+
     @GetMapping("/course/student_works/student_answers")
     public ResponseEntity<?> getStudentAnswersForStudentWork(@RequestParam int studentWorkId ){
         return ResponseEntity.ok(new Gson().toJson(studentAnswerDAO.getAllStudentAnswersByStudentWorkId(studentWorkId)));
@@ -302,8 +304,8 @@ public class CoursesController {
         }
     }
 
-    @GetMapping("/course/student_works/student_answer/student")
-    public ResponseEntity<?> downloadStudentAnswerByStudentId(@RequestParam int studentId, @RequestParam int studentWorkId){
+    @GetMapping("/course/student_works/student_answer/student/download")
+    public ResponseEntity<?> downloadStudentAnswerFileByStudentId(@RequestParam int studentId, @RequestParam int studentWorkId){
         StudentAnswer studentAnswer = studentAnswerDAO.getByStudentWorkIdAndStudentId(studentWorkId, studentId);
         StudentWork studentWork = studentWorkDAO.getStudentWorkById(studentAnswer.getStudentWorkId());
         CourseToGroup courseToGroup = courseToGroupDAO.getCourseToGroupById(studentWork.getCourseGroupId());
@@ -323,6 +325,12 @@ public class CoursesController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error downloading the file");
         }
+    }
+
+    @GetMapping("/course/student_works/student_answer/student/answer")
+    public ResponseEntity<?> getStudentAnswerByStudentId(@RequestParam int studentId, @RequestParam int studentWorkId){
+        StudentAnswer studentAnswer = studentAnswerDAO.getByStudentWorkIdAndStudentId(studentWorkId, studentId);
+        return ResponseEntity.ok(new Gson().toJson(studentAnswer));
     }
 
     @PostMapping("/course/student_works/student_answers")
