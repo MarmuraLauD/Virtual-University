@@ -18,16 +18,16 @@ public class MessageParser {
         return operationType.toString();
     }
 
-    public int getId(String message){
+    public String getEmail(String message){
         int spaceIndex = message.indexOf(' ');
-        StringBuilder idString = new StringBuilder();
+        StringBuilder emailString = new StringBuilder();
         for (int i = spaceIndex + 1; i < message.length(); i++){
-            if (Character.isDigit(message.charAt(i))){
-                idString.append(message.charAt(i));
+            if (message.charAt(i) != ' '){
+                emailString.append(message.charAt(i));
             }
             else break;
         }
-        return Integer.parseInt(idString.toString());
+        return emailString.toString();
     }
 
     public String getMessageBody(String message){

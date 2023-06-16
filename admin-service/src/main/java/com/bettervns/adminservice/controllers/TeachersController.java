@@ -33,6 +33,7 @@ public class TeachersController {
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(SECURITY_QUEUE_KEY, message);
+
         message = "create " + 0 + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
@@ -40,13 +41,14 @@ public class TeachersController {
         return ResponseEntity.ok("Successfully created");
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> updateTeacher(@RequestBody TeacherRequest requestObject, @PathVariable("id") int id){
-        String message = "update " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson
+    @PatchMapping()
+    public ResponseEntity<?> updateTeacher(@RequestBody TeacherRequest requestObject, @RequestParam("id") int id, @RequestParam String oldEmail){
+        String message = "update " + oldEmail + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson
                 (new User(requestObject.email(), JwtUtils.encodePassword(requestObject.password()), ERole.ROLE_TEACHER));
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(SECURITY_QUEUE_KEY, message);
+
         message = "update " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(requestObject);
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
@@ -61,6 +63,7 @@ public class TeachersController {
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(SECURITY_QUEUE_KEY, message);
+
         message = "delete " + id;
         template.setExchange(DIRECT_EXCHANGE_NAME);
         template.convertAndSend(TEACHERS_QUEUE_KEY, message);

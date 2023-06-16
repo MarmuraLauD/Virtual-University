@@ -39,9 +39,9 @@ public class StudentsController {
         return ResponseEntity.ok("Successfully created");
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<?> updateStudent(@RequestBody StudentRequest requestObject, @PathVariable("id") int id){
-        String message = "update " + id + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson
+    @PatchMapping()
+    public ResponseEntity<?> updateStudent(@RequestBody StudentRequest requestObject, @RequestParam("id") int id, @RequestParam String oldEmail){
+        String message = "update " + oldEmail + " " + new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson
                 (new User(requestObject.email(), JwtUtils.encodePassword(requestObject.password()), ERole.ROLE_STUDENT));
         System.out.println(message);
         template.setExchange(DIRECT_EXCHANGE_NAME);

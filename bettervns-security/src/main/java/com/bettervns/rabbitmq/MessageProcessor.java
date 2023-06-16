@@ -21,33 +21,34 @@ public class MessageProcessor {
 
     public void processMessage(String message){
         String operationType = messageParser.getOperationType(message);
-        switch (operationType) {
-            case "create" -> createUser(messageParser.getMessageBody(message));
-            case "update" -> updateUser(messageParser.getMessageBody(message), messageParser.getId(message));
-            case "delete" -> deleteUser(messageParser.getMessageBody(message));
-        }
-    }
-
-    public void deleteUser(String email){
         try {
-            User user = userDAO.getUserByEmail(email);
-            System.out.println(Integer.parseInt(user.getId().toString()));
-            userDAO.delete(Integer.parseInt(user.getId().toString()));
-        }
-        catch (ResponseStatusException e){
-            System.out.println("No users with this email");
+            switch (operationType) {
+                case "create" -> createUser(messageParser.getMessageBody(message));
+                case "update" -> updateUser(messageParser.getMessageBody(message), messageParser.getEmail(message));
+                case "delete" -> deleteUser(messageParser.getMessageBody(message));
+            }
+        } catch (ResponseStatusException e){
+            if (e.getReason().equals("Unable to find resource")) {
+                System.out.println("No user with this email");
+            }
             e.printStackTrace();
         }
     }
 
-    public void updateUser(String userParams, int id){
-        User user = new GsonBuilder().setDateFormat("yyyy-MM-dd").create().fromJson(userParams, User.class);
-        System.out.println();
-        userDAO.update(id, user);
+    public void deleteUser(String email) throws ResponseStatusException{
+        User user = userDAO.getUserByEmail(email);
+        System.out.println(Integer.parseInt(user.getId().toString()));
+        userDAO.delete(Integer.parseInt(user.getId().toString()));
     }
 
-    public void createUser(String userParams){
-        System.out.println(userParams);
+    public void updateUser(String newUserParams, String oldEmail) throws ResponseStatusException{
+        User oldUser = userDAO.getUserByEmail(oldEmail);
+        User newUser = new GsonBuilder().setDateFormat("yyyy-MM-dd").create().fromJson(newUserParams, User.class);
+        newUser.setId(oldUser.getId());
+        userDAO.update(Integer.parseInt(oldUser.getId().toString()), newUser);
+    }
+
+    public void createUser(String userParams) throws ResponseStatusException{
         User user = new GsonBuilder().setDateFormat("yyyy-MM-dd").create().fromJson(userParams, User.class);
         userDAO.add(user);
     }
