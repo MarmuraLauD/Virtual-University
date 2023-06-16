@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
@@ -234,4 +235,8 @@ public class JwtUtils {
         return false;
     }
 
+    public static String encodePassword(String sourceString){
+        BCryptPasswordEncoder encoder= new BCryptPasswordEncoder();
+        return encoder.encode(sourceString);
+    }
 }

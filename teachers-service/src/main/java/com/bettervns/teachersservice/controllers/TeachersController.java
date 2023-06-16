@@ -32,4 +32,9 @@ public class TeachersController {
         return ResponseEntity.ok(new Gson().toJson(teacherDAO.getTeacherById(id)));
     }
 
+    @GetMapping("/teacher/email/{email}")
+    public ResponseEntity<?> getTeacherByEmail(@PathVariable("email") String email) {
+        return ResponseEntity.ok(new Gson().toJson(teacherDAO.getTeacherByEmail(email)));
+    }
+
 }

@@ -29,6 +29,11 @@ public class StudentsController {
         return ResponseEntity.ok(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(studentDAO.getStudentById(id)));
     }
 
+    @GetMapping("/student/email/{email}")
+    public ResponseEntity<?> getById(@PathVariable("email") String email){
+        return ResponseEntity.ok(new GsonBuilder().setDateFormat("yyyy-MM-dd").create().toJson(studentDAO.getStudentByEmail(email)));
+    }
+
     /*@GetMapping("/students/group/{id}")
     public ResponseEntity<?> showStudentsOfGroup(@PathVariable("id") int id) {
         return ResponseEntity.ok(new Gson().toJson(studentDAO.showOfGroup(id)));

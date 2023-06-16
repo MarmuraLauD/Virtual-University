@@ -35,6 +35,10 @@ public class StudentDAO {
         }
     }
 
+    public Student getStudentByEmail(String email){
+        return studentRepository.findByEmail(email);
+    }
+
     public Student add(Student student) {
         return studentRepository.save(student);
     }

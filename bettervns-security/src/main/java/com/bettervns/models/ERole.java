@@ -1,7 +1,7 @@
 package com.bettervns.models;
 
 public enum ERole {
-    ROLE_STUDENT,
-    ROLE_ADMIN,
-    ROLE_TEACHER
+    ROLE_STUDENT, //0
+    ROLE_ADMIN, //1
+    ROLE_TEACHER //2
 }

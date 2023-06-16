@@ -33,6 +33,10 @@ public class TeacherDAO {
         }
     }
 
+    public Teacher getTeacherByEmail(String email){
+        return teacherRepository.findByEmail(email);
+    }
+
     public Teacher add(Teacher teacher) {
         return teacherRepository.save(teacher);
     }
