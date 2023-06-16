@@ -6,6 +6,7 @@ public record StudentRequest(
         String father,
         String date,
         String email,
-        String groupId
+        String groupId,
+        String password
 ) {
 }

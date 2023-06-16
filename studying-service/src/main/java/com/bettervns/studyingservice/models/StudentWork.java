@@ -3,6 +3,7 @@ package com.bettervns.studyingservice.models;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Nationalized;
 
 @Data
 @Entity
@@ -12,34 +13,58 @@ public class StudentWork {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "student_id", nullable = false)
-    private int studentId;
     @Column(name = "name", nullable = false)
-    private int name;
-    @Column(name = "mark", nullable = false)
-    private int mark;
-    @Column(name = "file_link", nullable = false)
-    private String fileLink;
-    @Column
-    private int studentToCourseGroupId;
+    private String name;
+    @Column(name = "description", nullable = false, length = 1000)
+    private String description;
+    @Column(name = "course_group_id", nullable = false)
+    private int courseGroupId;
 
-    public StudentWork(int studentId, int name, int mark, String fileLink, int studentToCourseGroupId) {
-        this.studentId = studentId;
+    public StudentWork(String name, String description, int courseGroupId) {
         this.name = name;
-        this.mark = mark;
-        this.fileLink = fileLink;
-        this.studentToCourseGroupId = studentToCourseGroupId;
+        this.description = description;
+        this.courseGroupId = courseGroupId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getCourseGroupId() {
+        return courseGroupId;
+    }
+
+    public void setCourseGroupId(int courseGroupId) {
+        this.courseGroupId = courseGroupId;
     }
 
     @Override
     public String toString() {
         return "StudentWork{" +
                 "id=" + id +
-                ", studentId=" + studentId +
-                ", name=" + name +
-                ", mark=" + mark +
-                ", fileLink='" + fileLink + '\'' +
-                ", studentToCourseGroup id=" + studentToCourseGroupId +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", courseGroupId=" + courseGroupId +
                 '}';
     }
 }

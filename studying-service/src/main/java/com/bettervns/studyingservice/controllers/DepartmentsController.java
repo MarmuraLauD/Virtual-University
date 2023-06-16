@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("studying")
 public class DepartmentsController {
     private final DepartmentDAO departmentDAO;
 
@@ -17,8 +17,8 @@ public class DepartmentsController {
     }
 
     @GetMapping("/departments")
-    public String getAllDepartments() {
-        return (departmentDAO.getAllDepartments().toString());
+    public ResponseEntity<?> getAllDepartments() {
+        return ResponseEntity.ok(new Gson().toJson(departmentDAO.getAllDepartments()));
     }
 
     @GetMapping("/department/{id}")

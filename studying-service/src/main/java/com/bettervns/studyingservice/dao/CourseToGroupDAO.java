@@ -2,6 +2,8 @@ package com.bettervns.studyingservice.dao;
 
 import com.bettervns.studyingservice.models.CourseToGroup;
 import com.bettervns.studyingservice.repository.CourseToGroupRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -15,9 +17,12 @@ public class CourseToGroupDAO {
 
     private final CourseToGroupRepository courseToGroupRepository;
 
+    private final EntityManager entityManager;
+
     @Autowired
-    public CourseToGroupDAO(com.bettervns.studyingservice.repository.CourseToGroupRepository courseToGroupRepository) {
+    public CourseToGroupDAO(CourseToGroupRepository courseToGroupRepository, EntityManager entityManager) {
         this.courseToGroupRepository = courseToGroupRepository;
+        this.entityManager = entityManager;
     }
 
     public List<CourseToGroup> getAllCourseToGroups() {
@@ -31,6 +36,26 @@ public class CourseToGroupDAO {
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
         }
+    }
+
+    public List<CourseToGroup> getCourseToGroupsByGroupId(int groupId) {
+        TypedQuery<CourseToGroup> query = entityManager.createQuery(
+                "SELECT g FROM CourseToGroup g WHERE g.groupId = :groupId", CourseToGroup.class);
+        query.setParameter("groupId", groupId);
+        List<CourseToGroup> resultList = query.getResultList();
+        return resultList;
+    }
+
+    public List<CourseToGroup> getCourseToGroupsByCourseId(int courseId) {
+        TypedQuery<CourseToGroup> query = entityManager.createQuery(
+                "SELECT g FROM CourseToGroup g WHERE g.courseId = :courseId", CourseToGroup.class);
+        query.setParameter("courseId", courseId);
+        List<CourseToGroup> resultList = query.getResultList();
+        return resultList;
+    }
+
+    public CourseToGroup getByCourseIdAndGroupId(int courseId, int groupId){
+        return courseToGroupRepository.findByCourseIdAndGroupId(courseId, groupId);
     }
 
     public CourseToGroup add(CourseToGroup courseToGroup) {

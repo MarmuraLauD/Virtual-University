@@ -4,4 +4,5 @@ import com.bettervns.studyingservice.models.CourseToGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CourseToGroupRepository extends JpaRepository<CourseToGroup, Integer> {
+    CourseToGroup findByCourseIdAndGroupId(int courseId, int groupId);
 }

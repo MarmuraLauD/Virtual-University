@@ -13,7 +13,7 @@ public class ApiGatewayApplication {
         SpringApplication.run(ApiGatewayApplication.class, args);
     }
 
-    @Bean
+    /*@Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder) {
         return builder.routes()
                 .route("adminservice", r -> r.path("/admin", "/admin/**")
@@ -28,5 +28,5 @@ public class ApiGatewayApplication {
                 .route("bettervnssecurity", r -> r.path( "/api/auth/**")
                         .uri("lb://bettervnssecurity"))
                 .build();
-    }
+    }*/
 }

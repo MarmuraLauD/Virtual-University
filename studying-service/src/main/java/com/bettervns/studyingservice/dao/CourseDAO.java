@@ -1,30 +1,39 @@
 package com.bettervns.studyingservice.dao;
 
 import com.bettervns.studyingservice.models.Course;
+import com.bettervns.studyingservice.models.CourseToGroup;
 import com.bettervns.studyingservice.repository.CourseRepository;
+import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
 public class CourseDAO {
 
-    private final CourseRepository CourseRepository;
+    private final CourseRepository courseRepository;
+
+    private final CourseToGroupDAO courseToGroupDAO;
+    private final EntityManager entityManager;
 
     @Autowired
-    public CourseDAO(CourseRepository CourseRepository) {
-        this.CourseRepository = CourseRepository;
+    public CourseDAO(CourseRepository courseRepository, EntityManager entityManager, CourseToGroupDAO courseToGroupDAO) {
+        this.courseRepository = courseRepository;
+        this.entityManager = entityManager;
+        this.courseToGroupDAO = courseToGroupDAO;
     }
 
     public List<Course> getAllCourses() {
-        return CourseRepository.findAll();
+        return courseRepository.findAll();
     }
 
     public Course getCourseById(int id) {
-        Optional<Course> courses = CourseRepository.findById(id);
+        Optional<Course> courses = courseRepository.findById(id);
         if (courses.isPresent()) {
             return courses.get();
         } else {
@@ -32,24 +41,41 @@ public class CourseDAO {
         }
     }
 
+    public List<Course> getCoursesForGroup(int groupId){
+        List<Integer> coursesIDs = new ArrayList<>();
+        List<CourseToGroup> courseToGroups = courseToGroupDAO.getCourseToGroupsByGroupId(groupId);
+        for (CourseToGroup i : courseToGroups){
+            if (!coursesIDs.contains(i.getCourseId())) coursesIDs.add(i.getCourseId());
+        }
+        List<Course> resultList = new ArrayList<>();
+        for (Integer i: coursesIDs){
+            resultList.add(getCourseById(i));
+        }
+        return resultList;
+    }
+
+    public List<Course> getCoursesForTeacher(int teacherId){
+        return courseRepository.findByTeacherId(teacherId);
+    }
+
     public Course add(Course course) {
-        return CourseRepository.save(course);
+        return courseRepository.save(course);
     }
 
     public void update(int id, Course updatedCourse) {
-        Optional<Course> optionalCourse = CourseRepository.findById(id);
+        Optional<Course> optionalCourse = courseRepository.findById(id);
         if (optionalCourse.isPresent()) {
             Course coursei = optionalCourse.get();
             coursei.setName(updatedCourse.getName());
             coursei.setDepartmentId(updatedCourse.getDepartmentId());
             coursei.setTeacherId(updatedCourse.getTeacherId());
-            CourseRepository.save(coursei);
+            courseRepository.save(coursei);
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Unable to find resource");
         }
     }
 
     public void delete(int id) {
-        CourseRepository.deleteById(id);
+        courseRepository.deleteById(id);
     }
 }
