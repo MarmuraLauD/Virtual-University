@@ -92,8 +92,7 @@ public class AuthRestController {
                 jwtUtils.generateSecretKeyPair();
             }
 
-            ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userPrincipal);
-
+            String jwtCookie = jwtUtils.generateJwtToken(userPrincipal);
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(userPrincipal.getId(), loginRequest.isRememberMe());
             ResponseCookie jwtRefreshCookie;
             if (loginRequest.isRememberMe()) {
@@ -102,12 +101,12 @@ public class AuthRestController {
                 jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(refreshToken.getToken(), refreshTokenDurationMs * 1000);
             }
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.SET_COOKIE, jwtCookie.toString());
             headers.add(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString());
             String role = jwtUtils.getRoleFromJwtToken(userPrincipal);
             String subject = loginRequest.getEmail();
             ObjectMapper objectMapper = new ObjectMapper();
             ObjectNode objectNode = objectMapper.createObjectNode();
+            objectNode.put("JWT", jwtCookie);
             objectNode.put("Subj", subject);
             objectNode.put("Role", role);
             String json = objectMapper.writeValueAsString(objectNode);
