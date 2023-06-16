@@ -8,6 +8,8 @@ import com.bettervns.payloads.response.MessageResponse;
 import com.bettervns.security.jwt.JwtUtils;
 import com.bettervns.security.services.RefreshTokenService;
 import com.bettervns.security.services.UserDetailsImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,8 +92,7 @@ public class AuthRestController {
                 jwtUtils.generateSecretKeyPair();
             }
 
-            ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userPrincipal);
-
+            String jwtCookie = jwtUtils.generateJwtToken(userPrincipal);
             RefreshToken refreshToken = refreshTokenService.createRefreshToken(userPrincipal.getId(), loginRequest.isRememberMe());
             ResponseCookie jwtRefreshCookie;
             if (loginRequest.isRememberMe()) {
@@ -100,10 +101,16 @@ public class AuthRestController {
                 jwtRefreshCookie = jwtUtils.generateRefreshJwtCookie(refreshToken.getToken(), refreshTokenDurationMs * 1000);
             }
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.SET_COOKIE, jwtCookie.toString());
             headers.add(HttpHeaders.SET_COOKIE, jwtRefreshCookie.toString());
-            String responseBody = jwtUtils.getRoleFromJwtToken(userPrincipal);
-            return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
+            String role = jwtUtils.getRoleFromJwtToken(userPrincipal);
+            String subject = loginRequest.getEmail();
+            ObjectMapper objectMapper = new ObjectMapper();
+            ObjectNode objectNode = objectMapper.createObjectNode();
+            objectNode.put("JWT", jwtCookie);
+            objectNode.put("Subj", subject);
+            objectNode.put("Role", role);
+            String json = objectMapper.writeValueAsString(objectNode);
+            return new ResponseEntity<>(json, headers, HttpStatus.OK);
         } catch (AuthenticationException e) {
             HttpHeaders headers = new HttpHeaders();
             return new ResponseEntity<>(headers, HttpStatus.UNAUTHORIZED);

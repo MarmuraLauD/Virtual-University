@@ -13,6 +13,7 @@
         <option value="$PROJECT_DIR$/teachers-service/pom.xml" />
         <option value="$PROJECT_DIR$/studying-service/pom.xml" />
         <option value="$PROJECT_DIR$/ddl-service/pom.xml" />
+        <option value="$PROJECT_DIR$/bettervns-chat/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
