@@ -6,6 +6,7 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.NoArgsConstructor;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemWriter;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import java.util.Base64;
 import java.util.Date;
 
 @Component
+@NoArgsConstructor
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
@@ -45,6 +47,7 @@ public class JwtUtils {
 
     @Value("${vns.app.jwtRefreshCookieName}")
     private String jwtRefreshCookie;
+
 
     public ResponseCookie generateJwtCookie(UserDetailsImpl userPrincipal) {
         String jwt = generateJwtToken(userPrincipal);
@@ -173,7 +176,7 @@ public class JwtUtils {
                 .setSubject((user.getEmail()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
-                .claim("roles", user.getRoles().toString())
+                .claim("role", user.getRole().toString())
                 .signWith(getPrivateKey(privateKeyFileName))
                 .compact();
     }
@@ -188,7 +191,7 @@ public class JwtUtils {
     }
 
     public String getRoleFromJwtToken(UserDetailsImpl userPrincipal) {
-        return userPrincipal.getAuthorities().toString();
+        return userPrincipal.getAuthorities().toString().substring(1, userPrincipal.getAuthorities().toString().length() - 1);
     }
 
     private ResponseCookie generateCookie(String name, String value, Long maxAge) {
@@ -230,4 +233,5 @@ public class JwtUtils {
 
         return false;
     }
+
 }
