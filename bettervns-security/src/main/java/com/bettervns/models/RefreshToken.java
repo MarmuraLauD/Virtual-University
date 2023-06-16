@@ -10,8 +10,8 @@ import java.time.Instant;
 public class RefreshToken {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "refresh-seq")
-    @SequenceGenerator(name = "refresh-seq", sequenceName = "refresh-seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "refresh_seq")
+    @SequenceGenerator(name = "refresh_seq", sequenceName = "refresh_seq", allocationSize = 1)
     private long id;
 
     @OneToOne
